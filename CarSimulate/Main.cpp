@@ -5,8 +5,7 @@
 #include <gl/glut.h>			// Header File For The GLut32 Library
 #include <fstream>
 #include <math.h>
-#include "Terrain.h"
-#include "SkyBox.h"
+#include "main.h"
 //include lib file
 
 #pragma comment(lib,"opengl32.lib")
@@ -34,6 +33,7 @@ int texture_num;
 
 Terrain* terrain;
 SkyBox* skyBox;
+CCamera *myCamera;
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -80,6 +80,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
 	glEnable(GL_FOG); // Enables GL_FOG
 	
+	myCamera = new CCamera();
+
 	terrain = new Terrain(keys, texture_num);
 	terrain->LoadTexture("Data/terrain texture.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
@@ -94,8 +96,30 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
-	gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
-	
+	//gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
+	if(keys['A'])
+		myCamera->RotateY(0.5);
+	if(keys['D'])
+		myCamera->RotateY(-0.5);
+	if(keys['W'])
+		myCamera->MoveForwards(-2.5);
+	if(keys['S'])
+		myCamera->MoveForwards(2.5);
+	if(keys['X'])
+		myCamera->RotateX(0.5);	
+	if(keys['Y'])
+		myCamera->RotateX(-0.5);
+	if(keys['C'])
+		myCamera->StrafeRight(-0.5);
+	if(keys['V'])
+		myCamera->StrafeRight(0.5);;
+	if(keys['F'])
+		myCamera->Move(Vector3D(0,-0.3,0));
+	if(keys['R'])
+		myCamera->Move(Vector3D(0,0.3,0));
+		
+	myCamera->Render();
+
 	terrain->Draw(0, -50, 0);
 	skyBox->Draw();
 
