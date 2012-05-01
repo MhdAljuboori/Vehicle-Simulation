@@ -1,10 +1,14 @@
 #include "Terrain.h"
 
-Terrain::Terrain(bool keys, int mapSize, int stepSize, float heightRatio)
+Terrain::Terrain(bool keys, int posX, int posY, int posZ,
+	int mapSize, int stepSize, float heightRatio)
 {
 	this->mapSize = mapSize;
 	this->stepSize = stepSize;
 	this->heightRatio = heightRatio;
+	this->posX = posX;
+	this->posY = posY;
+	this->posZ = posZ;
 
 	bRender = TRUE;
 	scaleValue = 0.15f;	
@@ -86,7 +90,7 @@ void Terrain::SetVertexColor(int x, int y)
 	float fColor = -0.15f + (Height(x, y) / 256.0f);
 	
 	// Assign This Blue Shade To The Current Vertex
-	glColor3f(0.0f, 0.0f, fColor );
+	glColor3f(0.0f, fColor, 0.0f);
 }
 
 void Terrain::RenderHeightMap()
@@ -116,7 +120,7 @@ void Terrain::RenderHeightMap()
 			// Set The Color Value Of The Current Vertex
 			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
-			glVertex3i(x, y, z);
+			glVertex3i(x + posX, y + posY, z + posZ);
 			//////////End Draw First Vertex//////////
 
 			//////////Begin Draw Second Vertex//////////
@@ -128,7 +132,7 @@ void Terrain::RenderHeightMap()
 			// Set The Color Value Of The Current Vertex
 			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
-			glVertex3i(x, y, z);
+			glVertex3i(x + posX, y + posY, z + posZ);
 			//////////End Draw Second Vertex//////////
 
 			//////////Begin Draw Third Vertex//////////
@@ -140,7 +144,7 @@ void Terrain::RenderHeightMap()
 			// Set The Color Value Of The Current Vertex
 			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
-			glVertex3i(x, y, z);
+			glVertex3i(x + posX, y + posY, z + posZ);
 			//////////End Draw Third Vertex//////////
 
 			//////////Begin Draw fourth Vertex//////////
@@ -152,7 +156,7 @@ void Terrain::RenderHeightMap()
 			// Set The Color Value Of The Current Vertex
 			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
-			glVertex3i(x, y, z); 
+			glVertex3i(x + posX, y + posY, z + posZ); 
 			//////////End Draw fourth Vertex//////////
 		}
 	}
@@ -162,8 +166,10 @@ void Terrain::RenderHeightMap()
 
 void Terrain::Draw()
 {
+	glPushMatrix();
 	glScalef(scaleValue, scaleValue * heightRatio, scaleValue);
 	RenderHeightMap();
+	glPopMatrix();
 }
 
 Terrain::~Terrain(void)

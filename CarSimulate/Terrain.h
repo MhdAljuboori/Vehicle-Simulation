@@ -9,7 +9,8 @@
 class Terrain
 {
 public:
-	Terrain(bool keys, int mapSize = 1024, int stepSize = 16, float heightRatio = 1.5f);
+	Terrain(bool keys, int posX = 0, int posY = 0, int posZ = 0,
+			int mapSize = 1024, int stepSize = 16, float heightRatio = 1.5f);
 	~Terrain(void);
 
 	//get methods
@@ -38,6 +39,8 @@ public:
 
 	bool IsPolygon();
 private:
+	int posX, posY, posZ;
+
 	int mapSize;			// Size Of Our .RAW Height Map
 	int stepSize;			// Width And Height Of Each Quad 
 							// ( low value more smooth if 1 it's mean vertex every pixel)

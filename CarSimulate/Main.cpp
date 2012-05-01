@@ -15,6 +15,9 @@ bool		active=TRUE;								// Window Active Flag Set To TRUE By Default
 bool		fullscreen=TRUE;							// Fullscreen Flag Set To TRUE By Default
 
 Terrain* terrain;
+Terrain* terrain1;
+Terrain* terrain2;
+Terrain* terrain3;
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -44,8 +47,14 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
-	terrain = new Terrain(keys);
+	terrain = new Terrain(keys, 100, 0, 100, 1024, 16, 1.5);
 	terrain->LoadRawFile("Data/Terrain.raw");
+	terrain1 = new Terrain(keys, 100-1024, 0, 100, 1024, 16, 1.5);
+	terrain1->LoadRawFile("Data/Terrain.raw");
+	terrain2 = new Terrain(keys, 100, 0, 100-1024, 1024, 16, 1.5);
+	terrain2->LoadRawFile("Data/Terrain.raw");
+	terrain3 = new Terrain(keys, 100-1024, 0, 100-1024, 1024, 16, 1.5);
+	terrain3->LoadRawFile("Data/Terrain.raw");
 
 	return TRUE;										// Initialization Went OK
 }
@@ -54,9 +63,13 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 	glLoadIdentity();									// Reset The Matrix
-	gluLookAt(212, 60, 194,  186, 55, 171,  0, 1, 0);	// This Determines Where The Camera's Position And View Is
+	gluLookAt(212, 60, 194, 186, 55, 171,  0, 1, 0);	// This Determines Where The Camera's Position And View Is
+//	glScalef(scaleValue, scaleValue * heightRatio, scaleValue);
 
 	terrain->Draw();
+	terrain1->Draw();
+	terrain2->Draw();
+	terrain3->Draw();
 
 	return TRUE;										// Keep Going
 }
@@ -315,9 +328,19 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,				// Handle For This Window
 		case WM_LBUTTONDOWN:							// Did We Receive A Left Mouse Click?
 		{
 			if (terrain->IsPolygon())						// Change The Rendering State Between Fill And Wire Frame
-				terrain->setWire();
+			{
+					terrain->setWire();
+					terrain1->setWire();
+					terrain2->setWire();
+					terrain3->setWire();
+			}
 			else
+			{
 				terrain->setPolygon();
+				terrain1->setPolygon();
+				terrain2->setPolygon();
+				terrain3->setPolygon();
+			}
 			return 0;									// Jump Back
 		}
 
@@ -389,7 +412,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,				// Instance
 			{
 				SwapBuffers(hDC);						// Swap Buffers (Double Buffering)
 			}
-
+			/*
 			if (keys[VK_F1])							// Is F1 Being Pressed?
 			{
 				keys[VK_F1]=FALSE;						// If So Make Key FALSE
@@ -400,13 +423,23 @@ int WINAPI WinMain(	HINSTANCE	hInstance,				// Instance
 				{
 					return 0;							// Quit If Window Was Not Created
 				}
-			}
+			}*/
 
 			if (keys[VK_UP])							// Is the UP ARROW key Being Pressed?
-				terrain->scaleValue += 0.001f;					// Increase the scale value to zoom in
+			{
+					terrain->scaleValue += 0.001f;					// Increase the scale value to zoom in
+					terrain1->scaleValue += 0.001f;					// Increase the scale value to zoom in
+					terrain2->scaleValue += 0.001f;					// Increase the scale value to zoom in
+					terrain3->scaleValue += 0.001f;					// Increase the scale value to zoom in
+			}
 
 			if (keys[VK_DOWN])							// Is the DOWN ARROW key Being Pressed?
+			{
 				terrain->scaleValue -= 0.001f;					// Decrease the scale value to zoom out
+				terrain1->scaleValue -= 0.001f;					// Decrease the scale value to zoom out
+				terrain2->scaleValue -= 0.001f;					// Decrease the scale value to zoom out
+				terrain3->scaleValue -= 0.001f;					// Decrease the scale value to zoom out
+			}
 
 		}
 	}
