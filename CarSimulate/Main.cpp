@@ -10,15 +10,17 @@
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include <gl\glaux.h>		// Header File For The Glaux Library
+#include "Terrain.h"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
 HWND		hWnd=NULL;		// Holds Our Window Handle
 HINSTANCE	hInstance;		// Holds The Instance Of The Application
 
-bool	keys[256];			// Array Used For The Keyboard Routine
-bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
-bool	fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
+bool	 keys[256];			// Array Used For The Keyboard Routine
+bool	 active=TRUE;		// Window Active Flag Set To TRUE By Default
+bool	 fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
+Terrain* terrain;
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -50,6 +52,13 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	
+	//new terrain object
+	terrain = new Terrain(keys);
+
+	// Here we read read in the height map from the .raw file and put it in our
+	// g_HeightMap array. We also pass in the size of the .raw file (1024).
+	terrain->LoadRawFile("Data/Terrain.raw", terrain->getMapSize(), terrain->getG_HeightMap());
+
 	return TRUE;										// Initialization Went OK
 }
 
