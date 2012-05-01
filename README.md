@@ -1,9 +1,7 @@
-== Car Simulate
+#Car Simulate
 	Car in a natural place.
 
-== Team
+#Team
 	Qusay Kamel
-	
 	Mohammed Aljobory
-	
 	Mohammed Aljarrah
