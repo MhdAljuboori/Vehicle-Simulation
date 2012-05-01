@@ -38,8 +38,16 @@ public:
 	void setWireNot();
 
 	bool IsPolygon();
+	
+	// Loads A Bitmap Image
+	AUX_RGBImageRec* LoadBMP(char *Filename);
+	// Load Bitmaps And Convert To Textures
+	int LoadGLTextures();
 private:
+	//int i;
 	int posX, posY, posZ;
+
+	GLuint texture[1];		// Storage For One Texture
 
 	int mapSize;			// Size Of Our .RAW Height Map
 	int stepSize;			// Width And Height Of Each Quad 
