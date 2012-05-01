@@ -143,7 +143,8 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 			//////////End Draw fourth Vertex//////////
 		}
 	}
-	glEnd();	
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset The Color
 }
 
 
