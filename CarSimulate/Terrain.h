@@ -9,8 +9,13 @@
 class Terrain
 {
 public:
-	Terrain(bool keys, int mapSize = 1024);
+	Terrain(bool keys, int mapSize = 1024, int stepSize = 16, float heightRatio = 1.5f);
 	~Terrain(void);
+
+	//get methods
+	int getMapSize();
+	int getStepSize();
+	BYTE* getG_HeightMap();
 
 	// Loads The .RAW File And Stores It In pHeightMap
 	void LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap);
@@ -19,17 +24,19 @@ public:
 	int Height(BYTE *pHeightMap, int X, int Y);
 	// This Sets The Color Value For A Particular Index
 	void SetVertexColor(BYTE *pHeightMap, int x, int y);
-
-	//get methods
-	int getMapSize();
-	BYTE* getG_HeightMap();
+	// This Renders The Height Map As Quads
+	void RenderHeightMap(BYTE pHeightMap[]);
 private:
-	int mapSize;
+	int mapSize;			// Size Of Our .RAW Height Map
+	int stepSize;			// Width And Height Of Each Quad 
+							// ( low value more smooth if 1 it's mean vertex every pixel)
+	float heightRatio;		// Ratio That The Y Is Scaled According To The X And Z (  )
 
 	bool keys[256]; // Array Used For The Keyboard Routine
 	bool bRender; // Polygon Flag Set To TRUE By Default
 	BYTE* g_HeightMap; // Holds The Height Map Data
 	float scaleValue; // Scale Value For The Terrain
+
 
 	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); // Declaration For WndProc
 };

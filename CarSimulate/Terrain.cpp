@@ -1,14 +1,13 @@
 #include "Terrain.h"
 
-#define STEP_SIZE 16 // Width And Height Of Each Quad ( NEW )
-#define HEIGHT_RATIO 1.5f // Ratio That The Y Is Scaled According To The X And Z ( NEW )
-
-Terrain::Terrain(bool keys, int mapSize)
+Terrain::Terrain(bool keys, int mapSize, int stepSize, float heightRatio)
 {
 	//hDC = NULL;
 	//hWnd = NULL;
 	//hRC = NULL;
 	this->mapSize = mapSize;
+	this->stepSize = stepSize;
+	this->heightRatio = heightRatio;
 
 	bRender = TRUE;
 	scaleValue = 0.15f;	
@@ -17,6 +16,9 @@ Terrain::Terrain(bool keys, int mapSize)
 
 int Terrain::getMapSize() 
 { return mapSize; }
+
+int Terrain::getStepSize()
+{ return stepSize; }
 
 BYTE* Terrain::getG_HeightMap() 
 { return g_HeightMap; }
@@ -73,6 +75,77 @@ void Terrain::SetVertexColor(BYTE *pHeightMap, int x, int y)
 	// Assign This Blue Shade To The Current Vertex
 	glColor3f(0.0f, 0.0f, fColor );
 }
+
+void Terrain::RenderHeightMap(BYTE pHeightMap[])
+{
+	int X = 0, Y = 0; // Create Some Variables To Walk The Array With.
+	int x, y, z; // Create Some Variables For Readability
+	if(!pHeightMap) return; // Make Sure Our Height Data Is Valid
+
+	// What We Want To Render
+	if(bRender)
+		glBegin( GL_QUADS ); // Render Polygons
+	else
+		glBegin( GL_LINES ); // Render Lines Instead
+
+	// Walk the array of height data and pluck out some heights to plot our points
+	for (X = 0; X < mapSize; X += stepSize)
+	{
+		for (Y = 0; Y < mapSize; Y += stepSize)
+		{
+
+			//////////Begin Draw First Vertex//////////
+			// Get The (X, Y, Z) Value For The Bottom Left Vertex
+			x = X;
+			y = Height(pHeightMap, X, Y);
+			z = Y;
+
+			// Set The Color Value Of The Current Vertex
+			SetVertexColor(pHeightMap, x, z);
+			// Send This Vertex To OpenGL To Be Rendered
+			glVertex3i(x, y, z);
+			//////////End Draw First Vertex//////////
+
+			//////////Begin Draw Second Vertex//////////
+			// Get The (X, Y, Z) Value For The Top Left Vertex
+			x = X;
+			y = Height(pHeightMap, X, Y + stepSize);
+			z = Y + stepSize;
+
+			// Set The Color Value Of The Current Vertex
+			SetVertexColor(pHeightMap, x, z);
+			// Send This Vertex To OpenGL To Be Rendered
+			glVertex3i(x, y, z);
+			//////////End Draw Second Vertex//////////
+
+			//////////Begin Draw Third Vertex//////////
+			// Get The (X, Y, Z) Value For The Top Right Vertex
+			x = X + stepSize;
+			y = Height(pHeightMap, X + stepSize, Y + stepSize);
+			z = Y + stepSize;
+
+			// Set The Color Value Of The Current Vertex
+			SetVertexColor(pHeightMap, x, z);
+			// Send This Vertex To OpenGL To Be Rendered
+			glVertex3i(x, y, z);
+			//////////End Draw Third Vertex//////////
+
+			//////////Begin Draw fourth Vertex//////////
+			// Get The (X, Y, Z) Value For The Bottom Right Vertex
+			x = X + stepSize;
+			y = Height(pHeightMap, X + stepSize, Y );
+			z = Y;
+
+			// Set The Color Value Of The Current Vertex
+			SetVertexColor(pHeightMap, x, z);
+			// Send This Vertex To OpenGL To Be Rendered
+			glVertex3i(x, y, z); 
+			//////////End Draw fourth Vertex//////////
+		}
+	}
+	glEnd();	
+}
+
 
 Terrain::~Terrain(void)
 {
