@@ -2,9 +2,6 @@
 
 Terrain::Terrain(bool keys, int mapSize, int stepSize, float heightRatio)
 {
-	//hDC = NULL;
-	//hWnd = NULL;
-	//hRC = NULL;
 	this->mapSize = mapSize;
 	this->stepSize = stepSize;
 	this->heightRatio = heightRatio;
@@ -26,8 +23,21 @@ float Terrain::getHeightRatio()
 BYTE* Terrain::getG_HeightMap() 
 { return g_HeightMap; }
 
-void Terrain::LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap)
+void Terrain::setWire()
+{ bRender = FALSE; }
+
+void Terrain::setPolygon()
+{ bRender = TRUE; }
+
+void Terrain::setWireNot()
+{ bRender != bRender; }
+
+bool Terrain::IsPolygon()
+{ return bRender; }
+
+void Terrain::LoadRawFile(LPSTR strName)
 {
+	int nSize = mapSize * mapSize;
 	FILE *pFile = NULL;
 	// Open The File In Read / Binary Mode.
 	pFile = fopen( strName, "rb" );
@@ -42,7 +52,7 @@ void Terrain::LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap)
 
 	// Here We Load The .RAW File Into Our pHeightMap Data Array
 	// We Are Only Reading In '1', And The Size Is (Width * Height)
-	fread( pHeightMap, 1, nSize, pFile );
+	fread( g_HeightMap, 1, nSize, pFile );
 
 	// After We Read The Data, It's A Good Idea To Check If Everything Read Fine
 	int result = ferror( pFile );
@@ -57,33 +67,33 @@ void Terrain::LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap)
 	fclose(pFile);
 }
 
-int Terrain::Height(BYTE *pHeightMap, int X, int Y)
+int Terrain::Height(int X, int Y)
 {
 	int x = X % mapSize; // Error Check Our x Value
 	int y = Y % mapSize; // Error Check Our y Value
-	if(!pHeightMap) return 0; // Make Sure Our Data Is Valid
+	if(!g_HeightMap) return 0; // Make Sure Our Data Is Valid
 
 	// Index Into Our Height Array And Return The Height
 	// The same of pHeightMap[x][y] if pHeightMap is 2D array
-	return pHeightMap[x + (y * mapSize)];
+	return g_HeightMap[x + (y * mapSize)];
 }
 
-void Terrain::SetVertexColor(BYTE *pHeightMap, int x, int y)
+void Terrain::SetVertexColor(int x, int y)
 {
 	// Depending On The Height Index
-	if(!pHeightMap) return; // Make Sure Our Height Data Is Valid
+	if(!g_HeightMap) return; // Make Sure Our Height Data Is Valid
 
-	float fColor = -0.15f + (Height(pHeightMap, x, y ) / 256.0f);
+	float fColor = -0.15f + (Height(x, y) / 256.0f);
 	
 	// Assign This Blue Shade To The Current Vertex
 	glColor3f(0.0f, 0.0f, fColor );
 }
 
-void Terrain::RenderHeightMap(BYTE pHeightMap[])
+void Terrain::RenderHeightMap()
 {
 	int X = 0, Y = 0; // Create Some Variables To Walk The Array With.
 	int x, y, z; // Create Some Variables For Readability
-	if(!pHeightMap) return; // Make Sure Our Height Data Is Valid
+	if(!g_HeightMap) return; // Make Sure Our Height Data Is Valid
 
 	// What We Want To Render
 	if(bRender)
@@ -100,11 +110,11 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 			//////////Begin Draw First Vertex//////////
 			// Get The (X, Y, Z) Value For The Bottom Left Vertex
 			x = X;
-			y = Height(pHeightMap, X, Y);
+			y = Height(X, Y);
 			z = Y;
 
 			// Set The Color Value Of The Current Vertex
-			SetVertexColor(pHeightMap, x, z);
+			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
 			glVertex3i(x, y, z);
 			//////////End Draw First Vertex//////////
@@ -112,11 +122,11 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 			//////////Begin Draw Second Vertex//////////
 			// Get The (X, Y, Z) Value For The Top Left Vertex
 			x = X;
-			y = Height(pHeightMap, X, Y + stepSize);
+			y = Height(X, Y + stepSize);
 			z = Y + stepSize;
 
 			// Set The Color Value Of The Current Vertex
-			SetVertexColor(pHeightMap, x, z);
+			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
 			glVertex3i(x, y, z);
 			//////////End Draw Second Vertex//////////
@@ -124,11 +134,11 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 			//////////Begin Draw Third Vertex//////////
 			// Get The (X, Y, Z) Value For The Top Right Vertex
 			x = X + stepSize;
-			y = Height(pHeightMap, X + stepSize, Y + stepSize);
+			y = Height(X + stepSize, Y + stepSize);
 			z = Y + stepSize;
 
 			// Set The Color Value Of The Current Vertex
-			SetVertexColor(pHeightMap, x, z);
+			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
 			glVertex3i(x, y, z);
 			//////////End Draw Third Vertex//////////
@@ -136,11 +146,11 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 			//////////Begin Draw fourth Vertex//////////
 			// Get The (X, Y, Z) Value For The Bottom Right Vertex
 			x = X + stepSize;
-			y = Height(pHeightMap, X + stepSize, Y );
+			y = Height(X + stepSize, Y );
 			z = Y;
 
 			// Set The Color Value Of The Current Vertex
-			SetVertexColor(pHeightMap, x, z);
+			SetVertexColor(x, z);
 			// Send This Vertex To OpenGL To Be Rendered
 			glVertex3i(x, y, z); 
 			//////////End Draw fourth Vertex//////////
@@ -152,7 +162,8 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 
 void Terrain::Draw()
 {
-	RenderHeightMap(g_HeightMap);
+	glScalef(scaleValue, scaleValue * heightRatio, scaleValue);
+	RenderHeightMap();
 }
 
 Terrain::~Terrain(void)

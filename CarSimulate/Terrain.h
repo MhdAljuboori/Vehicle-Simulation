@@ -18,27 +18,35 @@ public:
 	float getHeightRatio();
 	BYTE* getG_HeightMap();
 
-	// Loads The .RAW File And Stores It In pHeightMap
-	void LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap);
+	// Loads The .RAW File And Stores It In g_HeightMap
+	void LoadRawFile(LPSTR strName);
 
 	// This Returns The Height From A Height Map Index
-	int Height(BYTE *pHeightMap, int X, int Y);
+	int Height(int X, int Y);
 	// This Sets The Color Value For A Particular Index
-	void SetVertexColor(BYTE *pHeightMap, int x, int y);
+	void SetVertexColor(int x, int y);
 	// This Renders The Height Map As Quads
-	void RenderHeightMap(BYTE pHeightMap[]);
+	void RenderHeightMap();
 
 	void Draw();
+
+	float scaleValue;		// Scale Value For The Terrain
+
+	void setWire();
+	void setPolygon();
+	void setWireNot();
+
+	bool IsPolygon();
 private:
 	int mapSize;			// Size Of Our .RAW Height Map
 	int stepSize;			// Width And Height Of Each Quad 
 							// ( low value more smooth if 1 it's mean vertex every pixel)
-	float heightRatio;		// Ratio That The Y Is Scaled According To The X And Z (  )
+	float heightRatio;		// Ratio That The Y Is Scaled According To The X And Z
+	
 
 	bool keys[256]; // Array Used For The Keyboard Routine
 	bool bRender; // Polygon Flag Set To TRUE By Default
 	BYTE* g_HeightMap; // Holds The Height Map Data
-	float scaleValue; // Scale Value For The Terrain
 
 
 	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); // Declaration For WndProc
