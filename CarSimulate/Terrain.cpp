@@ -20,6 +20,9 @@ int Terrain::getMapSize()
 int Terrain::getStepSize()
 { return stepSize; }
 
+float Terrain::getHeightRatio()
+{ return heightRatio; }
+
 BYTE* Terrain::getG_HeightMap() 
 { return g_HeightMap; }
 
@@ -147,6 +150,10 @@ void Terrain::RenderHeightMap(BYTE pHeightMap[])
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset The Color
 }
 
+void Terrain::Draw()
+{
+	RenderHeightMap(g_HeightMap);
+}
 
 Terrain::~Terrain(void)
 {

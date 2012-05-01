@@ -15,6 +15,7 @@ public:
 	//get methods
 	int getMapSize();
 	int getStepSize();
+	float getHeightRatio();
 	BYTE* getG_HeightMap();
 
 	// Loads The .RAW File And Stores It In pHeightMap
@@ -26,6 +27,8 @@ public:
 	void SetVertexColor(BYTE *pHeightMap, int x, int y);
 	// This Renders The Height Map As Quads
 	void RenderHeightMap(BYTE pHeightMap[]);
+
+	void Draw();
 private:
 	int mapSize;			// Size Of Our .RAW Height Map
 	int stepSize;			// Width And Height Of Each Quad 

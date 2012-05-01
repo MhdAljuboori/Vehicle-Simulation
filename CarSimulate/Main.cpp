@@ -66,12 +66,12 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();	// Reset The Current Modelview Matrix
-	glBegin(GL_LINE_LOOP);
-	glVertex3f(0.0, 2.0, 0.0);
-	glVertex3f(1.0, 3.0, 0.0);
-	glVertex3f(1.0, 1.0, 0.0);
-	//glVertex3f(.0, .0, 0.0);
-	glEnd();
+	// Position View Up Vector
+	gluLookAt(212, 60, 194, 186, 55, 171, 0, 1, 0); // This Determines The Camera's Position And View
+	glScalef(0.15, 0.15f * terrain->getHeightRatio(), 0.15f);
+
+	terrain->Draw();
+
 	return TRUE;										// Keep Going
 }
 
