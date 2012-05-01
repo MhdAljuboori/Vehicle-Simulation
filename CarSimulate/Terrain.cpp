@@ -52,6 +52,27 @@ void Terrain::LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap)
 	fclose(pFile);
 }
 
+int Terrain::Height(BYTE *pHeightMap, int X, int Y)
+{
+	int x = X % mapSize; // Error Check Our x Value
+	int y = Y % mapSize; // Error Check Our y Value
+	if(!pHeightMap) return 0; // Make Sure Our Data Is Valid
+
+	// Index Into Our Height Array And Return The Height
+	// The same of pHeightMap[x][y] if pHeightMap is 2D array
+	return pHeightMap[x + (y * mapSize)];
+}
+
+void Terrain::SetVertexColor(BYTE *pHeightMap, int x, int y)
+{
+	// Depending On The Height Index
+	if(!pHeightMap) return; // Make Sure Our Height Data Is Valid
+
+	float fColor = -0.15f + (Height(pHeightMap, x, y ) / 256.0f);
+	
+	// Assign This Blue Shade To The Current Vertex
+	glColor3f(0.0f, 0.0f, fColor );
+}
 
 Terrain::~Terrain(void)
 {

@@ -15,6 +15,11 @@ public:
 	// Loads The .RAW File And Stores It In pHeightMap
 	void LoadRawFile(LPSTR strName, int nSize, BYTE *pHeightMap);
 
+	// This Returns The Height From A Height Map Index
+	int Height(BYTE *pHeightMap, int X, int Y);
+	// This Sets The Color Value For A Particular Index
+	void SetVertexColor(BYTE *pHeightMap, int x, int y);
+
 	//get methods
 	int getMapSize();
 	BYTE* getG_HeightMap();
