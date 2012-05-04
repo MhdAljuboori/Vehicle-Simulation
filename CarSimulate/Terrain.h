@@ -38,10 +38,10 @@ public:
 private:
 	int terraintexture;
 
+
 	int mapSize;			// Size Of Our .RAW Height Map
 	float stepSize;			// Width And Height Of Each Quad 
 							// ( low value more smooth if 1 it's mean vertex every pixel)
-	
 
 	bool keys[256]; // Array Used For The Keyboard Routine
 	bool WireRender; // Polygon Flag Set To TRUE By Default
