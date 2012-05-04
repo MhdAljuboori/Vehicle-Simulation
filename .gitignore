@@ -19,7 +19,7 @@ Thumbs.db
 *.ilk
 *.log
 *.opensdf
-*.sdf
+CarSimulate.sdf
 [Bb]in
 [Dd]ebug*/
 *.lib
