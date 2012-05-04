@@ -362,13 +362,13 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	BOOL	done=FALSE;								// Bool Variable To Exit Loop
 
 	// Ask The User Which Screen Mode They Prefer
-	//if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
-	//{
+	if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
+	{
 		fullscreen=FALSE;							// Windowed Mode
-	//}
+	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("Mahmoud Shahoud && Israa Othman (summer 2010)",700,500,16,fullscreen))
+	if (!CreateGLWindow("Car Simulation",700,500,16,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
@@ -408,10 +408,10 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				KillGLWindow();						// Kill Our Current Window
 				fullscreen=!fullscreen;				// Toggle Fullscreen / Windowed Mode
 				// Recreate Our OpenGL Window
-				//if (!CreateGLWindow("Mahmoud Shahoud && Israa Othman (summer 2010)",700,500,16,fullscreen))
-				//{
-					//return 0;						// Quit If Window Was Not Created
-				//}
+				if (!CreateGLWindow("Mhd Aljobory && Qusay Kamel && Mhd Jarrah (Car Simulation)",700,500,16,fullscreen))
+				{
+					return 0;						// Quit If Window Was Not Created
+				}
 
 			}
 		}
