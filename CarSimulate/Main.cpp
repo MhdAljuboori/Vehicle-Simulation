@@ -35,6 +35,12 @@ int texture_num;
 Terrain* terrain;
 SkyBox* skyBox;
 
+bool gp; // G Pressed?
+GLuint filter; // Which Filter To Use
+GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR }; // Storage For Three Types Of Fog
+GLuint fogfilter= 2; // Which Fog To Use
+GLfloat fogColor[4]= {0.5f, 0.5f, 0.5f, 1.0f}; // Fog Color
+
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
 	if (height==0)										// Prevent A Divide By Zero By
@@ -64,7 +70,16 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations	
 	quadric = gluNewQuadric();
-
+	
+	glClearColor(0.5f,0.5f,0.5f,1.0f); // We'll Clear To The Color Of The Fog
+	glFogi(GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
+	glFogfv(GL_FOG_COLOR, fogColor); // Set Fog Color
+	glFogf(GL_FOG_DENSITY, 0.35f); // How Dense Will The Fog Be
+	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
+	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
+	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
+	glEnable(GL_FOG); // Enables GL_FOG
+	
 	terrain = new Terrain(keys, texture_num);
 	terrain->LoadTexture("Data/terrain texture.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
@@ -420,6 +435,20 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					return 0;						// Quit If Window Was Not Created
 				}
 
+			}
+			if (keys['G'] && !gp) // Is The G Key Being Pressed?
+			{
+				gp=TRUE; // gp Is Set To TRUE
+				fogfilter+=1; // Increase fogfilter By One
+				if (fogfilter>2) // Is fogfilter Greater Than 2?
+				{
+					fogfilter=0; // If So, Set fogfilter To Zero
+				}
+				glFogi (GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
+			}
+			if (!keys['G']) // Has The G Key Been Released?
+			{
+				gp=FALSE; // If So, gp Is Set To FALSE
 			}
 		}
 	}
