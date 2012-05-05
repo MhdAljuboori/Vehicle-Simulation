@@ -9,7 +9,7 @@
 class Terrain
 {
 public:
-	Terrain(bool keys, int mapSize = 512, float stepSize = 1/512.0);
+	Terrain(bool keys, int &texture_num, int mapSize = 512, float stepSize = 1/512.0);
 	~Terrain(void);
 
 	//get methods
@@ -17,7 +17,7 @@ public:
 	float getStepSize();
 	GLubyte* getHeightMap();
 
-	void Draw();
+	void Draw(float posX=0, float posY=0, float posZ=0);
 
 	float scaleValue;		// Scale Value For The Terrain
 

@@ -1,11 +1,12 @@
 #include "Terrain.h"
 
-Terrain::Terrain(bool keys, int mapSize, float stepSize)
+Terrain::Terrain(bool keys, int &texture_num, int mapSize, float stepSize)
 {
 	this->mapSize = mapSize;
 	this->stepSize = stepSize;
 	
-	terraintexture = -1;
+	terraintexture = texture_num;
+	texture_num++;
 	WireRender = FALSE;
 	scaleValue = 0.6f;	
 	HeightMap = new BYTE[mapSize * mapSize];
@@ -127,24 +128,24 @@ void Terrain::LoadTexture(char *filename,int alpha)
     free(l_texture); // Free the memory we used to load the texture
 }
 
-void Terrain::Draw()
+void Terrain::Draw(float posX, float posY, float posZ)
 {
 	glPushMatrix();
 	glScaled(2, 2, 2);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D,terraintexture);
-	glScalef(1,scaleValue,1);
-	glTranslatef(-mapSize/2.0 ,0, -mapSize/2.0);
+	glBindTexture(GL_TEXTURE_2D, terraintexture);
+	glScalef(1, scaleValue, 1);
+	glTranslatef(-mapSize/2.0, 0, -mapSize/2.0);
 	for (int i = 3 ; i<mapSize-3 ; i++)
 	{
 		glBegin(GL_QUAD_STRIP);
 		for (int j=3 ; j<=mapSize-3 ; j++)
 		{
 			glTexCoord2f(j*stepSize,i*stepSize);
-			glVertex3f(j,GetValue(j,i),i);
+			glVertex3f(j+posX, GetValue(j,i)+posY, i+posZ);
 			
 			glTexCoord2f(j*stepSize,(i+1)*stepSize);
-			glVertex3f(j,GetValue(j,i+1),i+1);
+			glVertex3f(j+posX, GetValue(j,i+1)+posY, i+1+posZ);
 		}
 		glEnd();
 	}
