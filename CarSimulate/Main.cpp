@@ -6,6 +6,7 @@
 #include <fstream>
 #include <math.h>
 #include "Terrain.h"
+#include "SkyBox.h"
 //include lib file
 
 #pragma comment(lib,"opengl32.lib")
@@ -29,8 +30,10 @@ LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 // ============= Members Definition =========
 
 //==========================================
+int texture_num;
 
 Terrain* terrain;
+SkyBox* skyBox;
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -62,9 +65,12 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations	
 	quadric = gluNewQuadric();
 
-	terrain = new Terrain(keys);
+	terrain = new Terrain(keys, texture_num);
 	terrain->LoadTexture("Data/terrain texture.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
+
+	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
+				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 	
 	return true;										// Initialization Went OK
 }
@@ -73,9 +79,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
-	gluLookAt(500,600,400,0,0,0,0,1,0);
+	gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
 	
-	terrain->Draw();
+	terrain->Draw(0, -50, 0);
+	skyBox->Draw();
 
 	return true;
 } 
