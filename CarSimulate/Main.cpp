@@ -5,8 +5,7 @@
 #include <gl/glut.h>			// Header File For The GLut32 Library
 #include <fstream>
 #include <math.h>
-#include "Terrain.h"
-#include "SkyBox.h"
+#include "main.h"
 //include lib file
 
 #pragma comment(lib,"opengl32.lib")
@@ -34,6 +33,7 @@ int texture_num;
 
 Terrain* terrain;
 SkyBox* skyBox;
+CCamera *myCamera;
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -52,7 +52,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-
+	
 	// Calculate The Aspect Ratio Of The Window
 	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,10000.0f);
 
@@ -64,7 +64,7 @@ GLUquadric *quadric ;
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// Black Background
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
@@ -78,22 +78,28 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
-	glEnable(GL_FOG); // Enables GL_FOG
+	//glEnable(GL_FOG); // Enables GL_FOG
 	
+	myCamera = new CCamera();
+
 	terrain = new Terrain(keys, texture_num);
-	terrain->LoadTexture("Data/terrain texture.bmp");
+	terrain->LoadTexture("Data/grass.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 
-	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
-				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
+
+//	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
+//				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
 	GLfloat LightAmbient[] ={0.5f, 0.5f, 0.5f, 1.0f};
     GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
     GLfloat LightPosition[] = {0.0f, 0.0f, 2.0f, 1.0f};
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmbient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+
+	skyBox = new SkyBox("data/top.bmp","data/down.bmp","data/left.bmp","data/right.bmp","data/front.bmp","data/back.bmp");
+
 	
 	return true;										// Initialization Went OK
 }
@@ -102,12 +108,34 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
-	gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
 	
-	//GLfloat LA[]= {}
+	gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
+	//gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
+	if(keys['A'])
+		myCamera->RotateY(0.5);
+	if(keys['D'])
+		myCamera->RotateY(-0.5);
+	if(keys['W'])
+		myCamera->MoveForwards(-2.5);
+	if(keys['S'])
+		myCamera->MoveForwards(2.5);
+	if(keys['X'])
+		myCamera->RotateX(0.5);	
+	if(keys['Y'])
+		myCamera->RotateX(-0.5);
+	if(keys['C'])
+		myCamera->StrafeRight(-0.5);
+	if(keys['V'])
+		myCamera->StrafeRight(0.5);;
+	if(keys['F'])
+		myCamera->Move(Vector3D(0,-0.3,0));
+	if(keys['R'])
+		myCamera->Move(Vector3D(0,0.3,0));
+		
+	myCamera->Render();
 
 	terrain->Draw(0, -50, 0);
-	skyBox->Draw();
+	skyBox->draw();
 
 	return true;
 } 
@@ -445,20 +473,6 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					return 0;						// Quit If Window Was Not Created
 				}
 
-			}
-			if (keys['G'] && !gp) // Is The G Key Being Pressed?
-			{
-				gp=TRUE; // gp Is Set To TRUE
-				fogfilter+=1; // Increase fogfilter By One
-				if (fogfilter>2) // Is fogfilter Greater Than 2?
-				{
-					fogfilter=0; // If So, Set fogfilter To Zero
-				}
-				glFogi (GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
-			}
-			if (!keys['G']) // Has The G Key Been Released?
-			{
-				gp=FALSE; // If So, gp Is Set To FALSE
 			}
 		}
 	}
