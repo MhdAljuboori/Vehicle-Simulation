@@ -36,8 +36,8 @@ int texture_num;
 CCamera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
-Model_3DS* car;
 
+Model_3DS* car;
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -82,7 +82,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
-	//glEnable(GL_FOG); // Enables GL_FOG
+	glEnable(GL_FOG); // Enables GL_FOG
 	
 	myCamera = new CCamera();
 
@@ -93,7 +93,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->Draw(0,-50,0);
 
 	car = new Model_3DS();
-	car->Load("Data/Audi.3DS");
+	car->Load("Data/Audi_Q7_sub.3ds");
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
@@ -148,8 +148,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	car->pos.x=0;
     car->pos.y=100;
     car->pos.z=0;
-//    car->scale=0.01;
+    //car->scale=0.01;
     car->Draw();
+
 
 	return true;
 } 
