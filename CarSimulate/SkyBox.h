@@ -1,31 +1,40 @@
-#pragma once
+#ifndef SKYBOX_H
+#define SKYBOX_H
 
-#include <stdio.h>
 #include <windows.h>
-#include <gl\gl.h>
-#include <gl\glu.h>
+#include "Texture.h"
 
 class SkyBox
 {
+
 public:
-	SkyBox(int &texture_num, char *filenameBack, char *filenameFront, char *filenameTop, 
-			char *filenameDown, char *filenameRight, char *filenameLeft);
-	~SkyBox(void);
+	SkyBox();
+	SkyBox(char* toppath,char* bottompath,char* leftpath,char* rightpath,char* frontpath,char* backpath);
+	void draw();
+	void setTop(char* path) { top.loadTexture(path); }
+	void setBottom(char* path) { bottom.loadTexture(path); }
+	void setLeft(char* path) { left.loadTexture(path); }
+	void setRight(char* path) { right.loadTexture(path); }
+	void setFront(char* path) { front.loadTexture(path); }
+	void setBack(char* path) { back.loadTexture(path); }
 
-	void Draw();
+	GLuint getTop() { return top.getTexture(); }
+	GLuint getBottom() { return bottom.getTexture(); }
+	GLuint getLeft() { return left.getTexture(); }
+	GLuint getRight() { return right.getTexture(); }
+	GLuint getFront() { return front.getTexture(); }
+	GLuint getBack() { return back.getTexture(); }
+
+	~SkyBox() { }
+
 private:
-	int num_texture;
-
-	int index; 
-	int textureID;
-	int top, down, right, left, front, back;
-	int LoadTexture(char *filename,int alpha=255);
-
-	void DrawFace();
-	void DrawCube(float xPos   , float yPos   ,  float zPos , // location pf my cube
-  			  float xSize  , float ySize  ,  float zSize , // dimensions of my cube
-			  float xRot   , float yRot   ,  float zRot , // rotation angles
-			  float R , float G , float B ,// color of my cube
-			  GLenum mode);   // polygon mode of my cube
+	Texture top;
+	Texture bottom;
+    Texture left;
+	Texture right;
+	Texture front;
+	Texture back;
 };
 
+
+#endif

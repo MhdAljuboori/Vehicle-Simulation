@@ -52,7 +52,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-
+	
 	// Calculate The Aspect Ratio Of The Window
 	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,10000.0f);
 
@@ -78,16 +78,15 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
-	glEnable(GL_FOG); // Enables GL_FOG
+	//glEnable(GL_FOG); // Enables GL_FOG
 	
 	myCamera = new CCamera();
 
 	terrain = new Terrain(keys, texture_num);
-	terrain->LoadTexture("Data/terrain texture.bmp");
+	terrain->LoadTexture("Data/grass.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 
-	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
-				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
+	skyBox = new SkyBox("data/top.bmp","data/down.bmp","data/left.bmp","data/right.bmp","data/front.bmp","data/back.bmp");
 	
 	return true;										// Initialization Went OK
 }
@@ -121,7 +120,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	myCamera->Render();
 
 	terrain->Draw(0, -50, 0);
-	skyBox->Draw();
+	skyBox->draw();
 
 	return true;
 } 
