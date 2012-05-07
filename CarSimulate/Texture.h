@@ -2,8 +2,8 @@
 #define TEXTURE_H
 
 #include<windows.h>
-#include<gl.h>
-#include<glaux.h>
+#include<gl/gl.h>
+#include<gl/glaux.h>
 #include<MMSystem.h>
 #include<gameux.h>
 

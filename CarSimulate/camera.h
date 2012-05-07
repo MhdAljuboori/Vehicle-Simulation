@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <glut.h>		
+#include <gl/glut.h>		
 #include "vector3D.h"
 
 #define PI 3.1415265359
