@@ -86,6 +86,14 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
+
+	GLfloat LightAmbient[] ={0.5f, 0.5f, 0.5f, 1.0f};
+    GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat LightPosition[] = {0.0f, 0.0f, 2.0f, 1.0f};
+	glEnable(GL_LIGHTING);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmbient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
 	
 	return true;										// Initialization Went OK
 }
@@ -96,6 +104,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glLoadIdentity();// Reset The Current Modelview Matrix
 	gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
 	
+	//GLfloat LA[]= {}
+
 	terrain->Draw(0, -50, 0);
 	skyBox->Draw();
 
