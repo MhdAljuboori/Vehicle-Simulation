@@ -18,6 +18,7 @@ public:
 	GLubyte* getHeightMap();
 
 	void Draw(float posX=0, float posY=0, float posZ=0);
+	void draw();
 
 	float scaleValue;		// Scale Value For The Terrain
 
@@ -37,7 +38,7 @@ public:
 		{return (int)(HeightMap[i*mapSize + j]);}
 private:
 	int terraintexture;
-
+	GLuint terrainList;
 
 	int mapSize;			// Size Of Our .RAW Height Map
 	float stepSize;			// Width And Height Of Each Quad 

@@ -36,7 +36,7 @@ bool Terrain::IsPolygon()
 void Terrain::LoadHeightMap(char *filename)
 {
     int i, j=0;
-    FILE *textureFile;
+	    FILE *textureFile;
 
     BITMAPFILEHEADER fileheader;
     BITMAPINFOHEADER infoheader;
@@ -130,6 +130,8 @@ void Terrain::LoadTexture(char *filename,int alpha)
 
 void Terrain::Draw(float posX, float posY, float posZ)
 {
+	glGenLists(1);
+	glNewList(terrainList,GL_COMPILE);
 	glPushMatrix();
 	glScaled(2, 2, 2);
 	glEnable(GL_TEXTURE_2D);
@@ -150,8 +152,13 @@ void Terrain::Draw(float posX, float posY, float posZ)
 		glEnd();
 	}
 	glPopMatrix();
+	glEndList();
 }
 
+void Terrain::draw()
+{
+	glCallList(terrainList);
+}
 Terrain::~Terrain(void)
 {
 }

@@ -87,8 +87,10 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	myCamera = new CCamera();
 
 	terrain = new Terrain(keys, texture_num);
+
 	terrain->LoadTexture("Data/terrain ground.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
+	terrain->Draw(0,-50,0);
 
 	car = new Model_3DS();
 	car->Load("Data/Audi.3DS");
@@ -140,7 +142,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		
 	myCamera->Render();
 
-	terrain->Draw(0, -50, 0);
+	terrain->draw();
 	skyBox->draw();
 
 	car->pos.x=0;
