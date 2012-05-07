@@ -83,7 +83,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	myCamera = new CCamera();
 
 	terrain = new Terrain(keys, texture_num);
-	terrain->LoadTexture("Data/grass.bmp");
+	terrain->LoadTexture("Data/terrain ground.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 
 
@@ -98,7 +98,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
 
-	skyBox = new SkyBox("data/top.bmp","data/down.bmp","data/left.bmp","data/right.bmp","data/front.bmp","data/back.bmp");
+	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
+					"data/right1.bmp", "data/front1.bmp", "data/back1.bmp");
 
 	
 	return true;										// Initialization Went OK
