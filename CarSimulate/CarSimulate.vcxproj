@@ -77,7 +77,9 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GLTexture.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Model_3DS.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -86,7 +88,9 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="gltexture.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Model_3DS.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />

@@ -6,6 +6,8 @@
 #include <fstream>
 #include <math.h>
 #include "main.h"
+#include "camera.h"
+#include "Model_3DS.h"
 //include lib file
 
 #pragma comment(lib,"opengl32.lib")
@@ -31,9 +33,11 @@ LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 //==========================================
 int texture_num;
 
+CCamera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
-CCamera *myCamera;
+Model_3DS* car;
+
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -86,7 +90,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->LoadTexture("Data/terrain ground.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 
-
+	car = new Model_3DS();
+	car->Load("Data/Audi.3DS");
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
@@ -137,6 +142,12 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	terrain->Draw(0, -50, 0);
 	skyBox->draw();
+
+	car->pos.x=0;
+    car->pos.y=100;
+    car->pos.z=0;
+//    car->scale=0.01;
+    car->Draw();
 
 	return true;
 } 
