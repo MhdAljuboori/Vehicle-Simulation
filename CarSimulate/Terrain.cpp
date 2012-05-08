@@ -133,7 +133,7 @@ void Terrain::Draw(float posX, float posY, float posZ)
 	glGenLists(1);
 	glNewList(terrainList,GL_COMPILE);
 	glPushMatrix();
-	glScaled(2, 2, 2);
+	glScaled(4, 4, 4);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, terraintexture);
 	glScalef(1, scaleValue, 1);

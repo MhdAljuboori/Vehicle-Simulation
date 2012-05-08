@@ -65,6 +65,10 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 }
 GLUquadric *quadric ;
 
+GLfloat LightAmbient[]=		{ 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat LightPosition[]=	{ 0.0f, 200.0f, 0.0f, 1.0f };
+
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
@@ -82,7 +86,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
-	glEnable(GL_FOG); // Enables GL_FOG
+	//glEnable(GL_FOG); // Enables GL_FOG
 	
 	myCamera = new CCamera();
 
@@ -97,13 +101,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
-	GLfloat LightAmbient[] ={0.5f, 0.5f, 0.5f, 1.0f};
-    GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat LightPosition[] = {0.0f, 0.0f, 2.0f, 1.0f};
-	//glEnable(GL_LIGHTING);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmbient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
-	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
+	glEnable(GL_LIGHT1);								// Enable Light One
+	
 
 	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
 					"data/right1.bmp", "data/front1.bmp", "data/back1.bmp");
@@ -136,9 +138,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	if(keys['V'])
 		myCamera->StrafeRight(0.5);;
 	if(keys['F'])
-		myCamera->Move(Vector3D(0,-0.3,0));
+		myCamera->Move(Vector3D(0,-4,0));
 	if(keys['R'])
-		myCamera->Move(Vector3D(0,0.3,0));
+		myCamera->Move(Vector3D(0,4,0));
 		
 	myCamera->Render();
 
@@ -146,9 +148,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	skyBox->draw();
 
 	car->pos.x=0;
-    car->pos.y=100;
+    car->pos.y=61;
     car->pos.z=0;
-    //car->scale=0.01;
+    car->scale=0.9;
     car->Draw();
 
 
