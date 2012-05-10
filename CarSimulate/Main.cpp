@@ -39,7 +39,6 @@ SkyBox* skyBox;
 
 Model_3DS* car;
 GLTexture body;
-GLTexture ti;
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -107,7 +106,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
     car->scale=5;
 
 	body.LoadBMP("Data/tank.bmp");
-	ti.LoadBMP("Data/black.bmp");
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
