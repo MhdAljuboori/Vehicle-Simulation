@@ -23,7 +23,7 @@ public:
 	float getLength() { return sqrt( (x*x + y*y + z*z) ); }
 
 	///////////////  Fucntions For Vectors  /////////////////////
-	void Normalize();
+	static Vector3D Normalize(Vector3D vect);
 	Vector3D getNormalize();
 	Vector3D loadZero();
 	Vector3D loadOne();
@@ -33,7 +33,7 @@ public:
 	//////////////  Mathematical Operations  //////////////
 	Vector3D Add(Vector3D&);
 	Vector3D Substract(Vector3D&);
-	Vector3D crossProduct(Vector3D&);
+	static Vector3D crossProduct(Vector3D&, Vector3D&);
 	float dotProduct(Vector3D&);
 
 

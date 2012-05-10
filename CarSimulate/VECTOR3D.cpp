@@ -3,14 +3,17 @@
 #include<cmath>
 
 ////////////////  Functions For Vectors  //////////////
-void Vector3D::Normalize()
+Vector3D Vector3D::Normalize(Vector3D vect)
 {
-	float length=getLength();
-	if(length == 1 || length == 0)
-		return ;
-	x/=length;
-	y/=length;
-	z/=length;
+	Vector3D newVec;
+	float length= vect.getLength();
+	if(length == 0)
+		return newVec;
+	newVec.x = vect.x / length;
+	newVec.y = vect.y / length;
+	newVec.z = vect.z / length;
+
+	return newVec;
 }
 
 Vector3D Vector3D::getNormalize()
@@ -52,9 +55,11 @@ Vector3D Vector3D::Substract(Vector3D& vector)
 	return Vector3D(this->x - vector.x ,this->y - vector.y ,this->z - vector.z);
 }
 
-Vector3D Vector3D::crossProduct(Vector3D& vector)
+Vector3D Vector3D::crossProduct(Vector3D& vect1, Vector3D& vect2)
 {
-	return Vector3D( (this->y*vector.z)- (this->z*vector.y) , (this->z*vector.x) - (this->x*vector.z) , (this->x*vector.y) - (this->y*vector.x) );
+	return Vector3D( (vect1.y*vect2.z)- (vect1.z*vect2.y) , 
+					(vect1.z*vect2.x) - (vect1.x*vect2.z) , 
+					(vect1.x*vect2.y) - (vect1.y*vect2.x) );
 }
 
 float Vector3D::dotProduct(Vector3D& vector)
