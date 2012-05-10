@@ -68,6 +68,7 @@ GLUquadric *quadric ;
 
 GLfloat LightAmbient[]=		{ 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat LightSpecular[] =   { 1.0, 1.0, 1.0, 1.0 };
 GLfloat LightPosition[]=	{ 0.0f, 200.0f, 0.0f, 1.0f };
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
@@ -98,7 +99,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->Draw(0,-71,0);
 
 	car = new Model_3DS();
-	car->Load("Data/tank1.3ds");
+	car->Load("Data/tank2.3ds");
 
 	//car->pos.x=0;
     //car->pos.y=50;
@@ -111,6 +112,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glEnable(GL_LIGHT1);								// Enable Light One
 	
@@ -118,15 +120,32 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
 					"data/right1.bmp", "data/front1.bmp", "data/back1.bmp");
 
-	
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
+	//
+	//glDisable(GL_DEPTH_TEST);	// Turn Depth Testing Off
 	return true;										// Initialization Went OK
+}
+
+void DrawGlass() 
+{
+	glEnable(GL_BLEND);			// Turn Blending On
+	glBegin(GL_QUADS);
+	glColor3f(0, 0, 0.3);
+	glVertex3f(100, 100, 0);
+	glVertex3f(100, -100, 0);
+	glVertex3f(-100, -100, 0);
+	glVertex3f(-100, 100, 0);
+	glEnd();
+	glDisable(GL_BLEND);			// Turn Blending On
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
-
+	
 	//gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
 	if(keys['A'])
 		myCamera->RotateY(0.5);
@@ -158,13 +177,13 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	if(keys[VK_UP])
 	{
 		//car->pos.x += 1;
-		car->pos.x += cos(car->rot.y);
-		car->pos.z += cos(car->rot.y);
+		car->pos.x += 1*sin(car->rot.y);
+		car->pos.z += 1*cos(car->rot.y);
 	}
 	if(keys[VK_DOWN])
 	{
-		car->pos.x += sin(car->rot.y);
-		car->pos.z += sin(car->rot.y);
+		car->pos.x -= 1*sin(car->rot.y);
+		car->pos.z -= 1*cos(car->rot.y);
 	}
 	
 	terrain->draw();
@@ -184,10 +203,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	car->Materials[0].diffuse = diffuse;
 
     car->Draw();
-	//car->Materials[0].tex = body;
-	//car->Materials[1].tex = body;
-	//car->Materials[2].tex = body;
-
+	car->Materials[0].tex = body;
+	car->Materials[1].tex = body;
+	car->Materials[2].tex = body;
+	DrawGlass();
 	return true;
 } 
 
