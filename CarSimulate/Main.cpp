@@ -38,6 +38,8 @@ Terrain* terrain;
 SkyBox* skyBox;
 
 Model_3DS* car;
+GLTexture body;
+GLTexture ti;
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -91,13 +93,21 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, -1, -1));
 
 	terrain = new Terrain(keys, texture_num);
-
+	
 	terrain->LoadTexture("Data/terrain ground.bmp");
 	terrain->LoadHeightMap("Data/terrain height.bmp");
-	terrain->Draw(0,-50,0);
+	terrain->Draw(0,-71,0);
 
 	car = new Model_3DS();
-	car->Load("Data/Audi_Q7_sub.3ds");
+	car->Load("Data/tank1.3ds");
+
+	//car->pos.x=0;
+    //car->pos.y=50;
+    //car->pos.z=0;
+    car->scale=5;
+
+	body.LoadBMP("Data/tank.bmp");
+	ti.LoadBMP("Data/black.bmp");
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
@@ -143,15 +153,42 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		
 	myCamera->Render();
 
+	if(keys[VK_LEFT])
+		car->rot.y += 1;
+	if(keys[VK_RIGHT])
+		car->rot.y -= 1;
+	if(keys[VK_UP])
+	{
+		//car->pos.x += 1;
+		car->pos.x += cos(car->rot.y);
+		car->pos.z += cos(car->rot.y);
+	}
+	if(keys[VK_DOWN])
+	{
+		car->pos.x += sin(car->rot.y);
+		car->pos.z += sin(car->rot.y);
+	}
+	
 	terrain->draw();
 	skyBox->draw();
+	Model_3DS::Color ambient;
+	ambient.a = 1;
+	ambient.b = 0.5;
+	ambient.g = 0.5;
+	ambient.r = 0.5;
+	car->Materials[0].ambient = ambient;
 
-	car->pos.x=0;
-    car->pos.y=61;
-    car->pos.z=0;
-    car->scale=0.9;
+	Model_3DS::Color diffuse;
+	diffuse.a = 1;
+	diffuse.b = 1;
+	diffuse.g = 1;
+	diffuse.r = 1;
+	car->Materials[0].diffuse = diffuse;
+
     car->Draw();
-
+	//car->Materials[0].tex = body;
+	//car->Materials[1].tex = body;
+	//car->Materials[2].tex = body;
 
 	return true;
 } 

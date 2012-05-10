@@ -23,7 +23,6 @@ SkyBox::SkyBox(char* toppath,char* bottompath,char* leftpath,char* rightpath,cha
 void SkyBox::draw()
 {
 	glPushMatrix();
-
 	glBindTexture(GL_TEXTURE_2D,front.getTexture());
 	   glBegin(GL_QUADS);
 		// Front Face
