@@ -1,6 +1,14 @@
 #Vehicle Simulation
 	vehicle in a natural place.
 	note: not a physics simulation
+
+#How to use?
+	*C to put camera top of vehicle.
+	*H to return to free camera.
+	*G to Enable fog.
+	*H to Disable fog.
+	*W, A, S ans D to moving camera.
+	*Up, Down, Right, Left to moving vehicle.
 #Team
 	Qusay Kamel
 	Mohammed Aljobory
