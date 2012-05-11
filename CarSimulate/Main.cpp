@@ -41,6 +41,8 @@ SkyBox* skyBox;
 
 Model_3DS* car;
 GLTexture body;
+GLTexture MGunM;
+GLTexture MGun;
 
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -101,14 +103,16 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->Draw(0,-71,0);
 
 	car = new Model_3DS();
-	car->Load("Data/tank3.3ds");
+	car->Load("Data/FinalTank.3ds");
 
 	//car->pos.x=0;
-    //car->pos.y=50;
+    //car->pos.y=10;
     //car->pos.z=0;
-    car->scale=5;
+    //car->scale=5;
 
-	body.LoadBMP("Data/tank.bmp");
+	body.LoadBMP("Data/teext.bmp");
+	MGunM.LoadBMP("Data/GunM.bmp");
+	MGun.LoadBMP("Data/MGun.bmp");
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
 
@@ -152,6 +156,11 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
 
+float toRadian(float d)
+{
+	return (3.14*car->rot.y)/180;
+}
+
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
@@ -193,17 +202,20 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	}
 	else if(keys[VK_UP])
 	{
-		car->pos.x -= 2*sin(car->rot.y);
-		car->pos.z -= 2*cos(car->rot.y);
+		float r = toRadian(car->rot.y);
+		car->pos.x -= 2*sin(r);
+		car->pos.z -= 2*cos(r);
 	}
 	else if(keys[VK_DOWN])
 	{
-		car->pos.x += 2*sin(car->rot.y);
-		car->pos.z += 2*cos(car->rot.y);
+		float r = toRadian(car->rot.y);
+		car->pos.x += 2*sin(r);
+		car->pos.z += 2*cos(r);
 	}
 	
 	terrain->draw();
 	skyBox->draw();
+
 	Model_3DS::Color ambient;
 	ambient.a = 1;
 	ambient.b = 0.5;
@@ -220,8 +232,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
     car->Draw();
 	car->Materials[0].tex = body;
-	car->Materials[1].tex = body;
-	car->Materials[2].tex = body;
+	car->Materials[3].tex = MGun;
+	car->Materials[4].tex = MGunM;
+	car->Materials[5].tex = MGun;
+
 	if (CClicked)
 	{
 		myCamera->Position.setVector3D(car->pos.x, car->pos.y+20, car->pos.z);
@@ -229,8 +243,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		Vector3D camPos  = myCamera->getPosition();
 		Vector3D camRot  = myCamera->getRotation();
 		Vector3D camView = myCamera->getView();
-		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*2), camPos.getY() + (camView.getY()*2), 
-				camPos.getZ() + (camView.getZ()*2), 30, 
+		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*5), camPos.getY() + (camView.getY()*5), 
+				camPos.getZ() + (camView.getZ()*5), 30, 
 				camRot.getX(), camRot.getY(), camRot.getZ());
 	}
 
