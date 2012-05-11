@@ -27,6 +27,7 @@ public:
 	Camera(Vector3D, Vector3D);		//inits the values (Position: (0|0|0) Target: (0|0|-1) )
 	void Render ( void );			//executes some glRotates and a glTranslate command
 									//Note: You should call glLoadIdentity before using Render
+	void Reset(Vector3D view);
 	void Move ( Vector3D& Direction );
 	void MoveRight ( GLfloat Distance );
 	void MoveUpward( GLfloat Distance );

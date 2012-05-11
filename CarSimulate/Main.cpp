@@ -90,7 +90,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
-	glEnable(GL_FOG); // Enables GL_FOG
+	//glEnable(GL_FOG); // Enables GL_FOG
 	
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
@@ -182,12 +182,14 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	if(keys[VK_LEFT])
 	{
 		car->rot.y += 1;
-		myCamera->RotateY(1);
+		if (CClicked)
+			myCamera->RotateY(1);
 	}
 	if(keys[VK_RIGHT])
 	{
 		car->rot.y -= 1;
-		myCamera->RotateY(-1);
+		if (CClicked)
+			myCamera->RotateY(-1);
 	}
 	if(keys[VK_UP])
 	{
@@ -228,7 +230,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		Vector3D camPos  = myCamera->getPosition();
 		Vector3D camRot  = myCamera->getRotation();
 		Vector3D camView = myCamera->getView();
-		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*5), camPos.getY() + (camView.getY()*5), 
+		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*2), camPos.getY() + (camView.getY()*2), 
 				camPos.getZ() + (camView.getZ()*10), 30, 
 				camRot.getX(), camRot.getY(), camRot.getZ());
 	}
@@ -572,10 +574,14 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			if (keys['C'] && !CClicked)
 			{
 				CClicked = TRUE;
+				car->rot.y = 0;
+				myCamera->Reset(Vector3D(0, 0, -1));
 			}
-			else if (keys['V'])
+			else if (keys['V'] && CClicked)
 			{
 				CClicked = FALSE;
+				myCamera->Position.setY(myCamera->Position.getY()+10);
+				myCamera->View.setY(-1);
 			}
 		}
 	}
