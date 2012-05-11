@@ -101,7 +101,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->Draw(0,-71,0);
 
 	car = new Model_3DS();
-	car->Load("Data/tank2.3ds");
+	car->Load("Data/tank3.3ds");
 
 	//car->pos.x=0;
     //car->pos.y=50;
@@ -180,9 +180,15 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	myCamera->Render();
 
 	if(keys[VK_LEFT])
+	{
 		car->rot.y += 1;
+		myCamera->RotateY(1);
+	}
 	if(keys[VK_RIGHT])
+	{
 		car->rot.y -= 1;
+		myCamera->RotateY(-1);
+	}
 	if(keys[VK_UP])
 	{
 		//car->pos.x += 1;
@@ -217,10 +223,12 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	car->Materials[2].tex = body;
 	if (CClicked)
 	{
+		myCamera->Position.setVector3D(car->pos.x, car->pos.y+20, car->pos.z);
+
 		Vector3D camPos  = myCamera->getPosition();
 		Vector3D camRot  = myCamera->getRotation();
 		Vector3D camView = myCamera->getView();
-		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*10), camPos.getY() + (camView.getY()*10), 
+		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*5), camPos.getY() + (camView.getY()*5), 
 				camPos.getZ() + (camView.getZ()*10), 30, 
 				camRot.getX(), camRot.getY(), camRot.getZ());
 	}

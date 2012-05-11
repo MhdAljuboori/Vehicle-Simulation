@@ -14,16 +14,16 @@
 class Camera
 {
 private:
+	Vector3D Right;
+	Vector3D Up;
+	GLfloat RotatedX, RotatedY, RotatedZ;
+	bool ViewDirChanged;
+public:
 	Vector3D Position;
 	Vector3D View;			/*Not used for rendering the camera, but for "moveforwards"
 							So it is not necessary to "actualize" it always. It is only
 							actualized when ViewDirChanged is true and moveforwards is called*/
-	Vector3D Right;
-	Vector3D Up;
-	bool ViewDirChanged;
-	GLfloat RotatedX, RotatedY, RotatedZ;	
-	//void GetViewDir ( void );
-public:
+
 	Camera(Vector3D, Vector3D);		//inits the values (Position: (0|0|0) Target: (0|0|-1) )
 	void Render ( void );			//executes some glRotates and a glTranslate command
 									//Note: You should call glLoadIdentity before using Render
