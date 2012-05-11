@@ -39,7 +39,7 @@ Camera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
 
-Model_3DS* car;
+Model_3DS* tank;
 GLTexture body;
 GLTexture MGunM;
 GLTexture MGun;
@@ -102,8 +102,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 	terrain->Draw(0,-71,0);
 
-	car = new Model_3DS();
-	car->Load("Data/FinalTank.3ds");
+	tank = new Model_3DS();
+	tank->Load("Data/FinalTank.3ds");
 
 	//car->pos.x=0;
     //car->pos.y=10;
@@ -158,7 +158,7 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 
 float toRadian(float d)
 {
-	return (3.14*car->rot.y)/180;
+	return (3.14*tank->rot.y)/180;
 }
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
@@ -166,7 +166,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
 	
-	//gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
 	if (!CClicked)
 	{
 		if(keys['A'])
@@ -190,27 +189,27 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	if(keys[VK_LEFT])
 	{
-		car->rot.y += 1;
+		tank->rot.y += 1;
 		if (CClicked)
 			myCamera->RotateY(1);
 	}
 	else if(keys[VK_RIGHT])
 	{
-		car->rot.y -= 1;
+		tank->rot.y -= 1;
 		if (CClicked)
 			myCamera->RotateY(-1);
 	}
 	else if(keys[VK_UP])
 	{
-		float r = toRadian(car->rot.y);
-		car->pos.x -= 2*sin(r);
-		car->pos.z -= 2*cos(r);
+		float r = toRadian(tank->rot.y);
+		tank->pos.x -= 2*sin(r);
+		tank->pos.z -= 2*cos(r);
 	}
 	else if(keys[VK_DOWN])
 	{
-		float r = toRadian(car->rot.y);
-		car->pos.x += 2*sin(r);
-		car->pos.z += 2*cos(r);
+		float r = toRadian(tank->rot.y);
+		tank->pos.x += 2*sin(r);
+		tank->pos.z += 2*cos(r);
 	}
 	
 	terrain->draw();
@@ -221,24 +220,24 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	ambient.b = 0.5;
 	ambient.g = 0.5;
 	ambient.r = 0.5;
-	car->Materials[0].ambient = ambient;
+	tank->Materials[0].ambient = ambient;
 
 	Model_3DS::Color diffuse;
 	diffuse.a = 1;
 	diffuse.b = 1;
 	diffuse.g = 1;
 	diffuse.r = 1;
-	car->Materials[0].diffuse = diffuse;
+	tank->Materials[0].diffuse = diffuse;
 
-    car->Draw();
-	car->Materials[0].tex = body;
-	car->Materials[3].tex = MGun;
-	car->Materials[4].tex = MGunM;
-	car->Materials[5].tex = MGun;
+    tank->Draw();
+	tank->Materials[0].tex = body;
+	tank->Materials[3].tex = MGun;
+	tank->Materials[4].tex = MGunM;
+	tank->Materials[5].tex = MGun;
 
 	if (CClicked)
 	{
-		myCamera->Position.setVector3D(car->pos.x, car->pos.y+20, car->pos.z);
+		myCamera->Position.setVector3D(tank->pos.x, tank->pos.y+20, tank->pos.z);
 
 		Vector3D camPos  = myCamera->getPosition();
 		Vector3D camRot  = myCamera->getRotation();
@@ -539,7 +538,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("Car Simulation",700,500,16,fullscreen))
+	if (!CreateGLWindow("Veiche Simulation",700,500,16,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
@@ -587,7 +586,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			if (keys['C'] && !CClicked)
 			{
 				CClicked = TRUE;
-				car->rot.y = 0;
+				tank->rot.y = 0;
 				myCamera->Reset(Vector3D(0, 0, -1));
 			}
 			else if (keys['V'] && CClicked)
