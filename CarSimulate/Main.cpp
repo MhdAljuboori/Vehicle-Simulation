@@ -70,15 +70,15 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 }
 GLUquadric *quadric ;
 
-GLfloat LightAmbient[]=		{ 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat LightAmbient[]=		{ 0.5f, 0.5f, 0.0f, 1.0f };
+GLfloat LightDiffuse[]=		{ 0.0f, 0.0f, 1.0f, 1.0f };
 GLfloat LightSpecular[] =   { 1.0, 1.0, 1.0, 1.0 };
 GLfloat LightPosition[]=	{ 0.0f, 200.0f, 0.0f, 1.0f };
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// Black Background
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
@@ -92,8 +92,13 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
+	glEnable(GL_FOG);
 	
-	
+	glLightfv(GL_LIGHT0, GL_AMBIENT,  LightAmbient);		// Setup The Ambient Light
+	glLightfv(GL_LIGHT0, GL_DIFFUSE,  LightDiffuse);		// Setup The Diffuse Light
+	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
+	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);		// Position The Light
+
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
 	terrain = new Terrain(keys, texture_num);
@@ -115,12 +120,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	MGun.LoadBMP("Data/MGun.bmp");
 //	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
 //				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
-	glEnable(GL_LIGHT1);								// Enable Light One
 	
 
 	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
@@ -597,11 +596,21 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			}
 			if (keys['G'])
 			{
-				glEnable(GL_FOG); // Enables GL_FOG
+				glEnable(GL_FOG);		// Enables GL_FOG
+				glDisable(GL_LIGHTING);
+				glDisable(GL_LIGHT0);
 			}
-			else if (keys['H'])
+			else if (keys['L'])
 			{
-				glDisable(GL_FOG); // Disable GL_FOG
+				glDisable(GL_FOG);		// Disable GL_FOG
+				glEnable(GL_LIGHTING);
+				glEnable(GL_LIGHT0);
+			}
+			else if (keys['O'])
+			{
+				glDisable(GL_FOG);
+				glDisable(GL_LIGHTING);
+				glDisable(GL_LIGHT0);
 			}
 		}
 	}
