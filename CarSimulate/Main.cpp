@@ -32,6 +32,8 @@ LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
 //==========================================
 int texture_num;
+bool CClicked = FALSE;
+bool glass = FALSE;
 
 Camera *myCamera;
 Terrain* terrain;
@@ -90,7 +92,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
 	glEnable(GL_FOG); // Enables GL_FOG
 	
-	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, -1, -1));
+	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
 	terrain = new Terrain(keys, texture_num);
 	
@@ -127,17 +129,26 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	return true;										// Initialization Went OK
 }
 
-void DrawGlass() 
+void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, float posZ=0, 
+				float angle=45, float rotX=1, float rotY=0, float rotZ=0)
 {
-	glEnable(GL_BLEND);			// Turn Blending On
-	glBegin(GL_QUADS);
-	glColor3f(0, 0, 0.3);
-	glVertex3f(100, 100, 0);
-	glVertex3f(100, -100, 0);
-	glVertex3f(-100, -100, 0);
-	glVertex3f(-100, 100, 0);
-	glEnd();
-	glDisable(GL_BLEND);			// Turn Blending On
+	glPushMatrix();
+		glTranslatef(posX, posY, posZ);
+		if (rotY > 0)
+			glRotatef(rotY-15, 0, 1, 0);
+		if (rotY < 0)
+			glRotatef(rotY+15, 0, 1, 0);
+		glRotatef(angle, rotX, rotY, rotZ);
+		glEnable(GL_BLEND);			// Turn Blending On
+		glBegin(GL_QUADS);
+		glColor3f(0, 0, 0.3);
+		glVertex3f(width, height, 0);
+		glVertex3f(width, -height, 0);
+		glVertex3f(-width, -height, 0);
+		glVertex3f(-width, height, 0);
+		glEnd();
+		glDisable(GL_BLEND);			// Turn Blending Off
+	glPopMatrix();
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
 
@@ -147,27 +158,25 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glLoadIdentity();// Reset The Current Modelview Matrix
 	
 	//gluLookAt(300, 300, 400, 0, 100, 0, 0, 1, 0);
-	if(keys['A'])
-		myCamera->RotateY(0.5);
-	if(keys['D'])
-		myCamera->RotateY(-0.5);
-	if(keys['W'])
-		myCamera->MoveForward(2.5);
-	if(keys['S'])
-		myCamera->MoveForward(-2.5);
-	if(keys['X'])
-		myCamera->RotateX(0.5);	
-	if(keys['Z'])
-		myCamera->RotateX(-0.5);
-/*	if(keys['C'])
-		myCamera->StrafeRight(-0.5);
-	if(keys['V'])
-		myCamera->StrafeRight(0.5);*/
-	if(keys['F'])
-		myCamera->Move(Vector3D(0,-4,0));
-	if(keys['R'])
-		myCamera->Move(Vector3D(0,4,0));
-		
+	if (!CClicked)
+	{
+		if(keys['A'])
+			myCamera->RotateY(0.5);
+		if(keys['D'])
+			myCamera->RotateY(-0.5);
+		if(keys['W'])
+			myCamera->MoveForward(2.5);
+		if(keys['S'])
+			myCamera->MoveForward(-2.5);
+		if(keys['X'])
+			myCamera->RotateX(0.5);	
+		if(keys['Z'])
+			myCamera->RotateX(-0.5);
+		if(keys['F'])
+			myCamera->Move(Vector3D(0,-4,0));
+		if(keys['R'])
+			myCamera->Move(Vector3D(0,4,0));
+	}
 	myCamera->Render();
 
 	if(keys[VK_LEFT])
@@ -206,7 +215,16 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	car->Materials[0].tex = body;
 	car->Materials[1].tex = body;
 	car->Materials[2].tex = body;
-	DrawGlass();
+	if (CClicked)
+	{
+		Vector3D camPos  = myCamera->getPosition();
+		Vector3D camRot  = myCamera->getRotation();
+		Vector3D camView = myCamera->getView();
+		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*10), camPos.getY() + (camView.getY()*10), 
+				camPos.getZ() + (camView.getZ()*10), 30, 
+				camRot.getX(), camRot.getY(), camRot.getZ());
+	}
+
 	return true;
 } 
 
@@ -542,7 +560,14 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				{
 					return 0;						// Quit If Window Was Not Created
 				}
-
+			}
+			if (keys['C'] && !CClicked)
+			{
+				CClicked = TRUE;
+			}
+			else if (keys['V'])
+			{
+				CClicked = FALSE;
 			}
 		}
 	}

@@ -83,3 +83,18 @@ void Camera::SetRotateX(GLfloat Angle)
 	Up = Vector3D (0.0, 1.0, 0.0);
 	RotatedX=Angle;
 }
+
+Vector3D Camera::getPosition()
+{
+	return Position;
+}
+
+Vector3D Camera::getRotation()
+{
+	return Vector3D(RotatedX, RotatedY, RotatedZ);
+}
+
+Vector3D Camera::getView()
+{
+	return View;
+}
