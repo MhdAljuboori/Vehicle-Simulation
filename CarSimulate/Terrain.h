@@ -5,6 +5,7 @@
 #include <gl\gl.h>
 #include <gl\glu.h>
 #include <iostream>
+#include "Vector3D.h"
 
 class Terrain
 {
@@ -47,4 +48,6 @@ private:
 	bool keys[256]; // Array Used For The Keyboard Routine
 	bool WireRender; // Polygon Flag Set To TRUE By Default
 	GLubyte* HeightMap; // Holds The Height Map Data
+
+	static Vector3D CalcNormal(Vector3D v1, Vector3D v2, Vector3D v3);
 };
