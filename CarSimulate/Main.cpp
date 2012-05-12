@@ -106,15 +106,22 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain = new Terrain(keys, texture_num);
 	// Terrain Texture
 	terrain->LoadTexture("Data/terrain ground.bmp");
+	// Load Heightmap
 	terrain->LoadHeightMap("Data/terrain height.bmp");
+	// Draw Terrain
 	terrain->Draw(0,-71,0);
 
+
+	// Tank
 	tank = new Model_3DS();
+	// Load Model
 	tank->Load("Data/FinalTank.3ds");
+	// Load Tank textures
 	body.LoadBMP("Data/teext.bmp");
 	MGunM.LoadBMP("Data/GunM.bmp");
 	MGun.LoadBMP("Data/MGun.bmp");
 
+	// Skybox with load texture
 	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
 					"data/right1.bmp", "data/front1.bmp", "data/back1.bmp");
 
