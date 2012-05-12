@@ -99,36 +99,35 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);		// Position The Light
 
+	// Initialize camera
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
+	// Terrain
 	terrain = new Terrain(keys, texture_num);
-	
+	// Terrain Texture
 	terrain->LoadTexture("Data/terrain ground.bmp");
+	// Load Heightmap
 	terrain->LoadHeightMap("Data/terrain height.bmp");
+	// Draw Terrain
 	terrain->Draw(0,-71,0);
 
+
+	// Tank
 	tank = new Model_3DS();
-	tank->Load("Data/FinalTank.3ds");
+	// Load Model
+	tank->Load("Data/Models/FinalTank.3ds");
+	// Load Tank textures
+	body.LoadBMP("Data/tanktexture/teext.bmp");
+	MGunM.LoadBMP("Data/tanktexture/GunM.bmp");
+	MGun.LoadBMP("Data/tanktexture/MGun.bmp");
 
-	//car->pos.x=0;
-    //car->pos.y=10;
-    //car->pos.z=0;
-    //car->scale=5;
-
-	body.LoadBMP("Data/teext.bmp");
-	MGunM.LoadBMP("Data/GunM.bmp");
-	MGun.LoadBMP("Data/MGun.bmp");
-//	skyBox = new SkyBox(texture_num, "Data/back.bmp", "Data/front.bmp", "Data/top.bmp", 
-//				"Data/down.bmp", "Data/right.bmp", "Data/left.bmp");
-	
-
-	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
-					"data/right1.bmp", "data/front1.bmp", "data/back1.bmp");
+	// Skybox with load texture
+	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
+					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
 
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
-	//
-	//glDisable(GL_DEPTH_TEST);	// Turn Depth Testing Off
+
 	return true;										// Initialization Went OK
 }
 

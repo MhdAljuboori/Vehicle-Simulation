@@ -16,7 +16,7 @@ public:
 	GLuint getTexture();
 	void setTexture(GLuint text);
 	bool loadTexture(char* textruepath);
-
+	bool loadTexture(char *textruepath, int alpha);
 
 private:
 	GLuint texture;

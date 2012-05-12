@@ -6,6 +6,7 @@
 #include <gl\glu.h>
 #include <iostream>
 #include "Vector3D.h"
+#include "Texture.h"
 
 class Terrain
 {
@@ -30,7 +31,7 @@ public:
 	bool IsPolygon();
 	
 	// Load Bitmaps And Convert To Textures
-	void LoadTexture(char *filename,int alpha=255);
+	void LoadTexture(char *filename);
 
 	// Loads The File And Stores It In g_HeightMap
 	void LoadHeightMap(char *filename);
@@ -38,7 +39,7 @@ public:
 	inline GLubyte GetValue(int i ,int j  )  
 		{return (int)(HeightMap[i*mapSize + j]);}
 private:
-	int terraintexture;
+	Texture texture;
 	GLuint terrainList;
 
 	int mapSize;			// Size Of Our .RAW Height Map
