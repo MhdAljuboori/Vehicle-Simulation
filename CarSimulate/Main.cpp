@@ -8,6 +8,8 @@
 #include "main.h"
 #include "camera.h"
 #include "Model_3DS.h"
+#include "Environment.h"
+#include "Light.h"
 //include lib file
 
 #pragma comment(lib,"opengl32.lib")
