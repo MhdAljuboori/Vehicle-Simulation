@@ -3,7 +3,7 @@
 
 #include<Windows.h>
 #include "gltexture.h"
-#include<GL.H>
+#include <gl/GL.H>
 
 enum LightType { Directional , Spot };
 
