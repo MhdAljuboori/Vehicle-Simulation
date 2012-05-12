@@ -115,15 +115,15 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	// Tank
 	tank = new Model_3DS();
 	// Load Model
-	tank->Load("Data/FinalTank.3ds");
+	tank->Load("Data/Models/FinalTank.3ds");
 	// Load Tank textures
-	body.LoadBMP("Data/teext.bmp");
-	MGunM.LoadBMP("Data/GunM.bmp");
-	MGun.LoadBMP("Data/MGun.bmp");
+	body.LoadBMP("Data/tanktexture/teext.bmp");
+	MGunM.LoadBMP("Data/tanktexture/GunM.bmp");
+	MGun.LoadBMP("Data/tanktexture/MGun.bmp");
 
 	// Skybox with load texture
-	skyBox = new SkyBox("data/top1.bmp", "data/down.bmp", "data/left1.bmp", 
-					"data/right1.bmp", "data/front1.bmp", "data/back1.bmp");
+	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
+					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
 
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
