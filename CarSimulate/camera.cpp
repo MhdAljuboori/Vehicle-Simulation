@@ -93,6 +93,14 @@ void Camera::Reset(Vector3D view)
 	RotatedX = RotatedY = RotatedZ = 0;
 }
 
+void Camera::Reset()
+{
+	View.setVector3D(0, 0, -1);
+	Right = Vector3D (1.0, 0.0, 0.0);
+	Up = Vector3D (0.0, 1.0, 0.0);
+	RotatedX = RotatedY = RotatedZ = 0;
+}
+
 Vector3D Camera::getPosition()
 {
 	return Position;

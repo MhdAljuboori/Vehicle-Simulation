@@ -237,7 +237,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	if (CClicked)
 	{
 		myCamera->Position.setVector3D(tank->pos.x, tank->pos.y+20, tank->pos.z);
-
+		
 		Vector3D camPos  = myCamera->getPosition();
 		Vector3D camRot  = myCamera->getRotation();
 		Vector3D camView = myCamera->getView();
@@ -585,8 +585,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			if (keys['C'] && !CClicked)
 			{
 				CClicked = TRUE;
-				tank->rot.y = 0;
-				myCamera->Reset(Vector3D(0, 0, -1));
+				myCamera->Reset();
+				myCamera->RotateY(tank->rot.y);
 			}
 			else if (keys['V'] && CClicked)
 			{

@@ -28,6 +28,7 @@ public:
 	void Render ( void );			//executes some glRotates and a glTranslate command
 									//Note: You should call glLoadIdentity before using Render
 	void Reset(Vector3D view);
+	void Reset();
 	void Move ( Vector3D& Direction );
 	void MoveRight ( GLfloat Distance );
 	void MoveUpward( GLfloat Distance );
