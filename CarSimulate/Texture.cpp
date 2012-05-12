@@ -46,7 +46,7 @@ bool Texture::loadTexture(char* texturepath)
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
-	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,image->sizeX,image->sizeY,0,GL_RGB,GL_UNSIGNED_BYTE,image->data);
+	gluBuild2DMipmaps(GL_TEXTURE_2D,3,image->sizeX,image->sizeY,GL_RGB,GL_UNSIGNED_BYTE,image->data);
 
 	if(image)
 	{
