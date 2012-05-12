@@ -6,6 +6,7 @@
 #include <fstream>
 #include <math.h>
 #include "main.h"
+#include "Texture.h"
 #include "camera.h"
 #include "Model_3DS.h"
 //include lib file
@@ -33,11 +34,15 @@ LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 //==========================================
 int texture_num;
 bool CClicked = FALSE;
-bool glass = FALSE;
 
 Camera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
+
+Texture blackTexture;
+Texture woodTexture;
+Texture buildingTexture;
+Texture buildingTexture1;
 
 Model_3DS* tank;
 GLTexture body;
@@ -125,6 +130,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
 					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
 
+	blackTexture.loadTexture("data/black.bmp");
+	woodTexture.loadTexture("data/wood.bmp");
+	buildingTexture.loadTexture("data/Building.bmp");
+	buildingTexture1.loadTexture("data/Building1.bmp");
+
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
 
@@ -154,9 +164,152 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
 
+void DrawCube(float width, float height, float length, 
+				float posX=0, float posY=0, float posZ=0, 
+				float angle=0, float rotX=0, float rotY=0, float rotZ=0, 
+				int texture1=-1, int texture2=-1, int texture3=-1, int texture4=-1, 
+				int texture5=-1, int texture6=-1)
+{
+	glPushMatrix();
+	
+	glTranslatef(posX, posY, posZ);
+	glRotatef(angle, rotX, rotY, rotZ);
+	
+	if (texture1 != -1)
+		glBindTexture(GL_TEXTURE_2D, texture1);
+	glBegin(GL_QUADS);
+		//front
+		glNormal3f(0, 0, 1);
+		if (texture1 != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(width,-height,length);
+		if (texture1 != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(width,height,length);
+		if (texture1 != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(-width,height,length);
+		if (texture1 != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(-width,-height,length);
+	glEnd();
+	
+	if (texture2 != -1)
+		glBindTexture(GL_TEXTURE_2D, texture2);
+	glBegin(GL_QUADS);
+		//back
+		glNormal3f(0, 0, -1);
+		if (texture2 != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(width,-height,-length);
+		if (texture2 != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(width,height,-length);
+		if (texture2 != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(-width,height,-length);
+		if (texture2 != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(-width,-height,-length);
+	glEnd();
+
+	if (texture3 != -1)
+		glBindTexture(GL_TEXTURE_2D, texture3);
+	glBegin(GL_QUADS);
+		//right
+		glNormal3f(1, 0, 0);
+		if (texture3 != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(width,-height,-length);
+		if (texture3 != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(width,height,-length);
+		if (texture3 != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(width,height,length);
+		if (texture3 != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(width,-height,length);
+	glEnd();
+
+	if (texture4 != -1)
+		glBindTexture(GL_TEXTURE_2D, texture4);
+	glBegin(GL_QUADS);
+		//left
+		glNormal3f(-1, 0, 0);
+		if (texture4 != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(-width,-height,length);
+		if (texture4 != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(-width,height,length);
+		if (texture4 != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(-width,height,-length);
+		if (texture4 != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(-width,-height,-length);
+	glEnd();
+
+	if (texture5 != -1)
+		glBindTexture(GL_TEXTURE_2D, texture5);
+	glBegin(GL_QUADS);
+		//up
+		glNormal3f(0, 1, 0);
+		if (texture5 != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(width,height,length);
+		if (texture5 != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(width,height,-length);
+		if (texture5 != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(-width,height,-length);
+		if (texture5 != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(-width,height,length);
+	glEnd();
+
+	if (texture6 != -1)
+		glBindTexture(GL_TEXTURE_2D, texture6);
+	glBegin(GL_QUADS);
+		//down
+		glNormal3f(0, -1, 0);
+		if (texture6 != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(width,-height,-length);
+		if (texture6 != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(width,-height,length);
+		if (texture6 != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(-width,-height,length);
+		if (texture6 != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(-width,-height,-length);
+	glEnd();
+	glPopMatrix();
+}
+
 float toRadian(float d)
 {
 	return (3.14*tank->rot.y)/180;
+}
+
+void DrawTower(float posX, float posY, float posZ)
+{
+	DrawCube(1, 50, 1, posX-20, posY-80, posZ, 5, 1, 0, 0, blackTexture.getTexture());
+	DrawCube(1, 50, 1, posX-20, posY-80, posZ-40, -5, 1, 0, 0, blackTexture.getTexture());
+
+	DrawCube(1, 50, 1, posX+20, posY-80, posZ-40, -5, 1, 0, 0, blackTexture.getTexture());
+	DrawCube(1, 50, 1, posX+20, posY-80, posZ, 5, 1, 0, 0, blackTexture.getTexture());
+
+	DrawCube(30, 35, 30, posX, posY, posZ-20, 0, 0, 0, 0, woodTexture.getTexture(), woodTexture.getTexture(),
+			woodTexture.getTexture(), woodTexture.getTexture(), 
+			woodTexture.getTexture(), woodTexture.getTexture());
+	DrawCube(40, 2, 40, posX, posY+30, posZ-20, 0, 0, 0, 0, woodTexture.getTexture(), woodTexture.getTexture(),
+			woodTexture.getTexture(), woodTexture.getTexture(), 
+			woodTexture.getTexture(), woodTexture.getTexture());
 }
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
@@ -211,6 +364,12 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	}
 	
 	terrain->draw();
+	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, buildingTexture.getTexture());
+	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, buildingTexture1.getTexture());
+
+	DrawTower(300, 180, 40);
+
+	DrawTower(-280, 220, 200);
 	skyBox->draw();
 
 	Model_3DS::Color ambient;
