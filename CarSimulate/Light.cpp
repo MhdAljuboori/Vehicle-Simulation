@@ -16,7 +16,8 @@ Light::Light()
 	glEnable(lightName);
 }
 
-Light::Light(float* amb,float* spe,float* dif,float* pos,LightType lightTy,float* spotdir,float spotcut)
+Light::Light(float* amb, float* spe, float* dif, float* pos,
+			LightType lightTy, float* spotdir, float spotcut)
 {
 	for(int i = 0; i<4; i++)
 	{

@@ -43,6 +43,7 @@ SkyBox* skyBox;
 
 Texture blackTexture;
 Texture woodTexture;
+Texture woodTexture1;
 Texture buildingTexture;
 Texture buildingTexture1;
 
@@ -134,6 +135,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 	blackTexture.loadTexture("data/black.bmp");
 	woodTexture.loadTexture("data/wood.bmp");
+	woodTexture1.loadTexture("data/wood1.bmp");
 	buildingTexture.loadTexture("data/Building.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
 
@@ -293,6 +295,33 @@ void DrawCube(float width, float height, float length,
 	glPopMatrix();
 }
 
+void DrawFace(float width, float height, float length, 
+				float posX=0, float posY=0, float posZ=0, 
+				float angle=0, float rotX=0, float rotY=0, float rotZ=0, int texture=-1)
+{
+	glPushMatrix();
+	glTranslatef(posX, posY, posZ);
+	glRotatef(angle, rotX, rotY, rotZ);
+	if (texture != -1)
+		glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+		glNormal3f(0, 0, 1);
+		if (texture != -1)
+			glTexCoord2f(1, 0);
+		glVertex3f(width,0,length);
+		if (texture != -1)
+			glTexCoord2f(1, 1);
+		glVertex3f(width,0,length);
+		if (texture != -1)
+			glTexCoord2f(0, 1);
+		glVertex3f(-width,0,length);
+		if (texture != -1)
+			glTexCoord2f(0, 0);
+		glVertex3f(-width,0,length);
+	glEnd();
+	glPopMatrix();
+}
+
 float toRadian(float d)
 {
 	return (3.14*tank->rot.y)/180;
@@ -300,11 +329,26 @@ float toRadian(float d)
 
 void DrawTower(float posX, float posY, float posZ)
 {
-	DrawCube(1, 50, 1, posX-20, posY-80, posZ, 5, 1, 0, 0, blackTexture.getTexture());
-	DrawCube(1, 50, 1, posX-20, posY-80, posZ-40, -5, 1, 0, 0, blackTexture.getTexture());
+	//300, 180, 40
+	DrawCube(4, 50, 4, posX-20, posY-80, posZ, 5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+	DrawCube(4, 50, 4, posX-20, posY-80, posZ-40, -5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
 
-	DrawCube(1, 50, 1, posX+20, posY-80, posZ-40, -5, 1, 0, 0, blackTexture.getTexture());
-	DrawCube(1, 50, 1, posX+20, posY-80, posZ, 5, 1, 0, 0, blackTexture.getTexture());
+	DrawCube(2, 50, 2, posX-20, posY-80, posZ-20, 28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+	DrawCube(2, 50, 2, posX-20, posY-80, posZ-20, -28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+
+	DrawCube(4, 50, 4, posX+20, posY-80, posZ-40, -5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+	DrawCube(4, 50, 4, posX+20, posY-80, posZ, 5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+
+	DrawCube(2, 50, 2, posX+20, posY-80, posZ-20, -28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+	DrawCube(2, 50, 2, posX+20, posY-80, posZ-20, 28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
 
 	DrawCube(30, 35, 30, posX, posY, posZ-20, 0, 0, 0, 0, woodTexture.getTexture(), woodTexture.getTexture(),
 			woodTexture.getTexture(), woodTexture.getTexture(), 
@@ -372,6 +416,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	DrawTower(300, 180, 40);
 
 	DrawTower(-280, 220, 200);
+
+	//DrawFace(100, 1, 100);
 	skyBox->draw();
 
 	Model_3DS::Color ambient;
