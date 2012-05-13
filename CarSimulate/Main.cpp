@@ -44,6 +44,7 @@ SkyBox* skyBox;
 Texture blackTexture;
 Texture woodTexture;
 Texture woodTexture1;
+Texture road;
 Texture buildingTexture;
 Texture buildingTexture1;
 
@@ -136,6 +137,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	blackTexture.loadTexture("data/black.bmp");
 	woodTexture.loadTexture("data/wood.bmp");
 	woodTexture1.loadTexture("data/wood1.bmp");
+	road.loadTexture("data/road.bmp");
 	buildingTexture.loadTexture("data/Building.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
 
@@ -171,124 +173,124 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 void DrawCube(float width, float height, float length, 
 				float posX=0, float posY=0, float posZ=0, 
 				float angle=0, float rotX=0, float rotY=0, float rotZ=0, 
-				int texture1=-1, int texture2=-1, int texture3=-1, int texture4=-1, 
-				int texture5=-1, int texture6=-1)
+				int frontTex=-1, int backTex=-1, int rightTex=-1, int leftTex=-1, 
+				int upTex=-1, int downTex=-1)
 {
 	glPushMatrix();
 	
 	glTranslatef(posX, posY, posZ);
 	glRotatef(angle, rotX, rotY, rotZ);
 	
-	if (texture1 != -1)
-		glBindTexture(GL_TEXTURE_2D, texture1);
+	if (frontTex != -1)
+		glBindTexture(GL_TEXTURE_2D, frontTex);
 	glBegin(GL_QUADS);
 		//front
 		glNormal3f(0, 0, 1);
-		if (texture1 != -1)
+		if (frontTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,length);
-		if (texture1 != -1)
+		if (frontTex != -1)
 			glTexCoord2f(1, 1);
 		glVertex3f(width,height,length);
-		if (texture1 != -1)
+		if (frontTex != -1)
 			glTexCoord2f(0, 1);
 		glVertex3f(-width,height,length);
-		if (texture1 != -1)
+		if (frontTex != -1)
 			glTexCoord2f(0, 0);
 		glVertex3f(-width,-height,length);
 	glEnd();
 	
-	if (texture2 != -1)
-		glBindTexture(GL_TEXTURE_2D, texture2);
+	if (backTex != -1)
+		glBindTexture(GL_TEXTURE_2D, backTex);
 	glBegin(GL_QUADS);
 		//back
 		glNormal3f(0, 0, -1);
-		if (texture2 != -1)
+		if (backTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,-length);
-		if (texture2 != -1)
+		if (backTex != -1)
 			glTexCoord2f(1, 1);
 		glVertex3f(width,height,-length);
-		if (texture2 != -1)
+		if (backTex != -1)
 			glTexCoord2f(0, 1);
 		glVertex3f(-width,height,-length);
-		if (texture2 != -1)
+		if (backTex != -1)
 			glTexCoord2f(0, 0);
 		glVertex3f(-width,-height,-length);
 	glEnd();
 
-	if (texture3 != -1)
-		glBindTexture(GL_TEXTURE_2D, texture3);
+	if (rightTex != -1)
+		glBindTexture(GL_TEXTURE_2D, rightTex);
 	glBegin(GL_QUADS);
 		//right
 		glNormal3f(1, 0, 0);
-		if (texture3 != -1)
+		if (rightTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,-length);
-		if (texture3 != -1)
+		if (rightTex != -1)
 			glTexCoord2f(1, 1);
 		glVertex3f(width,height,-length);
-		if (texture3 != -1)
+		if (rightTex != -1)
 			glTexCoord2f(0, 1);
 		glVertex3f(width,height,length);
-		if (texture3 != -1)
+		if (rightTex != -1)
 			glTexCoord2f(0, 0);
 		glVertex3f(width,-height,length);
 	glEnd();
 
-	if (texture4 != -1)
-		glBindTexture(GL_TEXTURE_2D, texture4);
+	if (leftTex != -1)
+		glBindTexture(GL_TEXTURE_2D, leftTex);
 	glBegin(GL_QUADS);
 		//left
 		glNormal3f(-1, 0, 0);
-		if (texture4 != -1)
+		if (leftTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(-width,-height,length);
-		if (texture4 != -1)
+		if (leftTex != -1)
 			glTexCoord2f(1, 1);
 		glVertex3f(-width,height,length);
-		if (texture4 != -1)
+		if (leftTex != -1)
 			glTexCoord2f(0, 1);
 		glVertex3f(-width,height,-length);
-		if (texture4 != -1)
+		if (leftTex != -1)
 			glTexCoord2f(0, 0);
 		glVertex3f(-width,-height,-length);
 	glEnd();
 
-	if (texture5 != -1)
-		glBindTexture(GL_TEXTURE_2D, texture5);
+	if (upTex != -1)
+		glBindTexture(GL_TEXTURE_2D, upTex);
 	glBegin(GL_QUADS);
 		//up
 		glNormal3f(0, 1, 0);
-		if (texture5 != -1)
+		if (upTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,height,length);
-		if (texture5 != -1)
+		if (upTex != -1)
 			glTexCoord2f(1, 1);
 		glVertex3f(width,height,-length);
-		if (texture5 != -1)
+		if (upTex != -1)
 			glTexCoord2f(0, 1);
 		glVertex3f(-width,height,-length);
-		if (texture5 != -1)
+		if (upTex != -1)
 			glTexCoord2f(0, 0);
 		glVertex3f(-width,height,length);
 	glEnd();
 
-	if (texture6 != -1)
-		glBindTexture(GL_TEXTURE_2D, texture6);
+	if (downTex != -1)
+		glBindTexture(GL_TEXTURE_2D, downTex);
 	glBegin(GL_QUADS);
 		//down
 		glNormal3f(0, -1, 0);
-		if (texture6 != -1)
+		if (downTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,-length);
-		if (texture6 != -1)
+		if (downTex != -1)
 			glTexCoord2f(1, 1);
 		glVertex3f(width,-height,length);
-		if (texture6 != -1)
+		if (downTex != -1)
 			glTexCoord2f(0, 1);
 		glVertex3f(-width,-height,length);
-		if (texture6 != -1)
+		if (downTex != -1)
 			glTexCoord2f(0, 0);
 		glVertex3f(-width,-height,-length);
 	glEnd();
@@ -358,6 +360,59 @@ void DrawTower(float posX, float posY, float posZ)
 			woodTexture.getTexture(), woodTexture.getTexture());
 }
 
+void DrawRoad()
+{
+	DrawCube(50, 1, 60, 208, -14.7, 647, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 70, 285, -14.9, 590, -40, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 340, -15, 505, -20, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 363, -14.9, 432, -15, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 373, -14.8, 352, -5, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 20, 375, -14.7, 290, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 20, 368, -14.6, 273, 20, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 344, -14.8, 250, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 272, -14.7, 230, 80, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, 265, -15.0, -178, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 350, -14.9, -220, -50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 382, -14.8, -262, -30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.6, -350, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 200, -14.1, -510, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 190, 80, -15, -510, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -495, -14.9, -480, 110, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -570, -14.9, -452, 110, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -608, -14.8, -430, 130, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -635, -14.7, -400, 150, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -668, -14.6, -345, 150, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -726, -15, -242, 150, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -750, -14.9, -157, 0, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -742, -14.8, -62, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -742, -14.7, -62, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -710, -14.6, 30, 30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 90, -645, -15, 140, 30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -576, -14.9, 235, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -500, -15, 300, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, -405, -15, 378, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 100, -275, -15, 486, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -185, -14.9, 550, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, -95, -15, 582, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+}
+
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
@@ -416,8 +471,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	DrawTower(300, 180, 40);
 
 	DrawTower(-280, 220, 200);
+	
+	DrawRoad();
 
-	//DrawFace(100, 1, 100);
 	skyBox->draw();
 
 	Model_3DS::Color ambient;
@@ -736,11 +792,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	MSG		msg;									// Windows Message Structure
 	BOOL	done=FALSE;								// Bool Variable To Exit Loop
 
-	// Ask The User Which Screen Mode They Prefer
-	if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
-	{
-		fullscreen=FALSE;							// Windowed Mode
-	}
+	fullscreen=FALSE;							// Windowed Mode
 
 	// Create Our OpenGL Window
 	if (!CreateGLWindow("Veiche Simulation",700,500,16,fullscreen))
