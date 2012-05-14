@@ -41,6 +41,7 @@ Camera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
 
+#pragma region texture variable
 Texture blackTexture;
 Texture woodTexture;
 Texture woodTexture1;
@@ -48,20 +49,32 @@ Texture road;
 Texture ground;
 Texture buildingTexture;
 Texture buildingTexture1;
+#pragma endregion
 
+#pragma region Decors variable
 Model_3DS* Decor1;
+Model_3DS* Decor2;
+Model_3DS* Decor3;
+Model_3DS* Decor4;
+Model_3DS* Decor5;
+Model_3DS* Decor6;
 GLTexture Decor1texture;
+#pragma endregion
 
+#pragma region tank variable
 Model_3DS* tank;
 GLTexture body;
 GLTexture MGunM;
 GLTexture MGun;
+#pragma endregion
 
+#pragma region Fog variable
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
 GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR }; // Storage For Three Types Of Fog
 GLuint fogfilter= 2; // Which Fog To Use
 GLfloat fogColor[4]= {0.5f, 0.5f, 0.5f, 1.0f}; // Fog Color
+#pragma endregion
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -83,10 +96,12 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 }
 GLUquadric *quadric ;
 
+#pragma region Light variable
 GLfloat LightAmbient[]=		{ 0.5f, 0.5f, 0.0f, 1.0f };
 GLfloat LightDiffuse[]=		{ 0.0f, 0.0f, 1.0f, 1.0f };
 GLfloat LightSpecular[] =   { 1.0, 1.0, 1.0, 1.0 };
 GLfloat LightPosition[]=	{ 0.0f, 200.0f, 0.0f, 1.0f };
+#pragma endregion
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
@@ -98,6 +113,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations	
 	quadric = gluNewQuadric();
 	
+#pragma region Fog
 	glClearColor(0.5f,0.5f,0.5f,1.0f); // We'll Clear To The Color Of The Fog
 	glFogi(GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
 	glFogfv(GL_FOG_COLOR, fogColor); // Set Fog Color
@@ -106,15 +122,19 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
 	glEnable(GL_FOG);
-	
+#pragma endregion
+
+#pragma region Global Light
 	glLightfv(GL_LIGHT0, GL_AMBIENT,  LightAmbient);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT0, GL_DIFFUSE,  LightDiffuse);		// Setup The Diffuse Light
 	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);		// Position The Light
+#pragma endregion
 
 	// Initialize camera
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
+#pragma region Terrain Load
 	// Terrain
 	terrain = new Terrain(keys, texture_num);
 	// Terrain Texture
@@ -123,8 +143,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 	// Draw Terrain
 	terrain->Draw(0,-71,0);
+#pragma endregion
 
-
+#pragma region Load Tank Model & Texture
 	// Tank
 	tank = new Model_3DS();
 	// Load Model
@@ -133,19 +154,63 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	body.LoadBMP("Data/tanktexture/teext.bmp");
 	MGunM.LoadBMP("Data/tanktexture/GunM.bmp");
 	MGun.LoadBMP("Data/tanktexture/MGun.bmp");
+#pragma endregion
 
+#pragma region Decors
 	Decor1 = new Model_3DS();
-	Decor1->Load("Data/Models/Decor1.3DS");
-	Decor1->pos.x = 520;
-	Decor1->pos.y = -5;
-	Decor1->pos.z = 10;
-	Decor1->scale *= 0.8;
-	Decor1texture.LoadBMP("Data/decorstextures/tank.bmp");
+	Decor2 = new Model_3DS();
+	Decor3 = new Model_3DS();
+	Decor4 = new Model_3DS();
+	Decor5 = new Model_3DS();
+	Decor6 = new Model_3DS();
 
+	Decor1->Load("Data/Models/Decor1.3DS");	
+	Decor2->Load("Data/Models/Decor1.3DS");
+	Decor3->Load("Data/Models/Decor1.3DS");
+	Decor4->Load("Data/Models/Decor1.3DS");
+	Decor5->Load("Data/Models/Decor1.3DS");
+	Decor6->Load("Data/Models/Decor1.3DS");
+
+	Decor1->pos.x = 520;
+	Decor2->pos.x = 520;
+	Decor3->pos.x = 620;
+	Decor4->pos.x = 620;
+	Decor5->pos.x = 480;
+	Decor6->pos.x = 480;
+
+	Decor1->pos.y = -5;
+	Decor2->pos.y = -5;
+	Decor3->pos.y = -5;
+	Decor4->pos.y = -5;
+	Decor5->pos.y = -5;
+	Decor6->pos.y = -5;
+
+	Decor1->pos.z = 10;
+	Decor2->pos.z = 70;
+	Decor3->pos.z = 160;
+	Decor4->pos.z = 220;
+	Decor5->pos.z = 180;
+	Decor6->pos.z = 240;
+
+	Decor1->scale *= 0.8;
+	Decor2->scale *= 0.8;
+	Decor3->scale *= 0.8;
+	Decor4->scale *= 0.8;
+	Decor5->scale *= 0.8;
+	Decor6->scale *= 0.8;
+
+	Decor3->rot.y = 180;
+	Decor4->rot.y = 180;
+	Decor1texture.LoadBMP("Data/decorstextures/tank.bmp");
+#pragma endregion
+
+#pragma region Load Sky Box
 	// Skybox with load texture
 	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
 					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
+#pragma endregion
 
+#pragma region Load Textures
 	blackTexture.loadTexture("data/black.bmp");
 	woodTexture.loadTexture("data/wood.bmp");
 	woodTexture1.loadTexture("data/wood1.bmp");
@@ -153,13 +218,16 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	ground.loadTexture("data/ground.bmp");
 	buildingTexture.loadTexture("data/Building.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
-
+#pragma endregion
+	
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
 
 	return true;										// Initialization Went OK
 }
 
+#pragma region draw methods
+#pragma region draw glass
 void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, float posZ=0, 
 				float angle=45, float rotX=1, float rotY=0, float rotZ=0)
 {
@@ -182,7 +250,8 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 	glPopMatrix();
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
-
+#pragma endregion
+#pragma region draw cube
 void DrawCube(float width, float height, float length, 
 				float posX=0, float posY=0, float posZ=0, 
 				float angle=0, float rotX=0, float rotY=0, float rotZ=0, 
@@ -309,39 +378,14 @@ void DrawCube(float width, float height, float length,
 	glEnd();
 	glPopMatrix();
 }
-
-void DrawFace(float width, float height, float length, 
-				float posX=0, float posY=0, float posZ=0, 
-				float angle=0, float rotX=0, float rotY=0, float rotZ=0, int texture=-1)
-{
-	glPushMatrix();
-	glTranslatef(posX, posY, posZ);
-	glRotatef(angle, rotX, rotY, rotZ);
-	if (texture != -1)
-		glBindTexture(GL_TEXTURE_2D, texture);
-	glBegin(GL_QUADS);
-		glNormal3f(0, 0, 1);
-		if (texture != -1)
-			glTexCoord2f(1, 0);
-		glVertex3f(width,0,length);
-		if (texture != -1)
-			glTexCoord2f(1, 1);
-		glVertex3f(width,0,length);
-		if (texture != -1)
-			glTexCoord2f(0, 1);
-		glVertex3f(-width,0,length);
-		if (texture != -1)
-			glTexCoord2f(0, 0);
-		glVertex3f(-width,0,length);
-	glEnd();
-	glPopMatrix();
-}
-
+#pragma endregion
+#pragma region To Radian
 float toRadian(float d)
 {
 	return (3.14*tank->rot.y)/180;
 }
-
+#pragma endregion
+#pragma region draw tower
 void DrawTower(float posX, float posY, float posZ)
 {
 	//300, 180, 40
@@ -372,7 +416,8 @@ void DrawTower(float posX, float posY, float posZ)
 			woodTexture.getTexture(), woodTexture.getTexture(), 
 			woodTexture.getTexture(), woodTexture.getTexture());
 }
-
+#pragma endregion
+#pragma region draw road
 void DrawRoad()
 {
 	DrawCube(50, 1, 60, 208, -14.7, 647, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
@@ -425,12 +470,15 @@ void DrawRoad()
 	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
 }
-float num=0, num2=0;
+#pragma endregion
+#pragma endregion
+
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
 	
+	#pragma region Camera Move
 	if (!CClicked)
 	{
 		if(keys['A'])
@@ -451,7 +499,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			myCamera->Move(Vector3D(0,4,0));
 	}
 	myCamera->Render();
+	#pragma endregion
 
+	#pragma region Tank Move
 	if(keys[VK_LEFT])
 	{
 		tank->rot.y += 1;
@@ -476,9 +526,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		tank->pos.x += 2*sin(r);
 		tank->pos.z += 2*cos(r);
 	}
-	
 	terrain->draw();
+	#pragma endregion
 
+	#pragma region draw natural
 	//Draw buildings
 	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, buildingTexture.getTexture());
 	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, buildingTexture1.getTexture());
@@ -487,10 +538,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	DrawTower(300, 180, 40);
 	DrawTower(-280, 220, 200);
 
-	if (keys['B'])
-		num+= 1;
-	if (keys['N'])
-		num2+=1;
 	//Draw Ground
 	DrawCube(100, 1, 80, 555, -16, 205, 0, 0, 0, 0, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
 		ground.getTexture(), ground.getTexture(), ground.getTexture());
@@ -500,16 +547,38 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	// Draw the road
 	DrawRoad();
 
-
+	#pragma region draw decors
 	//Draw Decors
 	Decor1->Draw();
 	Decor1->Materials[0].tex = Decor1texture;
 	Decor1->Materials[1].tex = Decor1texture;
 	Decor1->Materials[2].tex = Decor1texture;
-	
+	Decor2->Draw();
+	Decor2->Materials[0].tex = Decor1texture;
+	Decor2->Materials[1].tex = Decor1texture;
+	Decor2->Materials[2].tex = Decor1texture;
+	Decor3->Draw();
+	Decor3->Materials[0].tex = Decor1texture;
+	Decor3->Materials[1].tex = Decor1texture;
+	Decor3->Materials[2].tex = Decor1texture;
+	Decor4->Draw();
+	Decor4->Materials[0].tex = Decor1texture;
+	Decor4->Materials[1].tex = Decor1texture;
+	Decor4->Materials[2].tex = Decor1texture;
+	Decor5->Draw();
+	Decor5->Materials[0].tex = Decor1texture;
+	Decor5->Materials[1].tex = Decor1texture;
+	Decor5->Materials[2].tex = Decor1texture;
+	Decor6->Draw();
+	Decor6->Materials[0].tex = Decor1texture;
+	Decor6->Materials[1].tex = Decor1texture;
+	Decor6->Materials[2].tex = Decor1texture;
+	#pragma endregion
 
 	skyBox->draw();
-
+	#pragma endregion
+	
+	#pragma region Tank drawing
 	Model_3DS::Color ambient;
 	ambient.a = 1;
 	ambient.b = 0.5;
@@ -529,7 +598,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	tank->Materials[3].tex = MGun;
 	tank->Materials[4].tex = MGunM;
 	tank->Materials[5].tex = MGun;
+	#pragma endregion
 
+	#pragma region Camera on Vehicle
 	if (CClicked)
 	{
 		myCamera->Position.setVector3D(tank->pos.x, tank->pos.y+20, tank->pos.z);
@@ -541,6 +612,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 				camPos.getZ() + (camView.getZ()*5), 30, 
 				camRot.getX(), camRot.getY(), camRot.getZ());
 	}
+	#pragma endregion
 
 	return true;
 } 
