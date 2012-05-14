@@ -45,8 +45,12 @@ Texture blackTexture;
 Texture woodTexture;
 Texture woodTexture1;
 Texture road;
+Texture ground;
 Texture buildingTexture;
 Texture buildingTexture1;
+
+Model_3DS* Decor1;
+GLTexture Decor1texture;
 
 Model_3DS* tank;
 GLTexture body;
@@ -130,6 +134,14 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	MGunM.LoadBMP("Data/tanktexture/GunM.bmp");
 	MGun.LoadBMP("Data/tanktexture/MGun.bmp");
 
+	Decor1 = new Model_3DS();
+	Decor1->Load("Data/Models/Decor1.3DS");
+	Decor1->pos.x = 520;
+	Decor1->pos.y = -5;
+	Decor1->pos.z = 10;
+	Decor1->scale *= 0.8;
+	Decor1texture.LoadBMP("Data/decorstextures/tank.bmp");
+
 	// Skybox with load texture
 	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
 					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
@@ -138,6 +150,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	woodTexture.loadTexture("data/wood.bmp");
 	woodTexture1.loadTexture("data/wood1.bmp");
 	road.loadTexture("data/road.bmp");
+	ground.loadTexture("data/ground.bmp");
 	buildingTexture.loadTexture("data/Building.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
 
@@ -412,7 +425,7 @@ void DrawRoad()
 	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
 }
-
+float num=0, num2=0;
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
@@ -465,14 +478,35 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	}
 	
 	terrain->draw();
+
+	//Draw buildings
 	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, buildingTexture.getTexture());
 	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, buildingTexture1.getTexture());
 
+	//DrawTowers
 	DrawTower(300, 180, 40);
-
 	DrawTower(-280, 220, 200);
-	
+
+	if (keys['B'])
+		num+= 1;
+	if (keys['N'])
+		num2+=1;
+	//Draw Ground
+	DrawCube(100, 1, 80, 555, -16, 205, 0, 0, 0, 0, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
+		ground.getTexture(), ground.getTexture(), ground.getTexture());
+	DrawCube(80, 1, 80, 575, -16, 45, 0, 0, 0, 0, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
+		ground.getTexture(), ground.getTexture(), ground.getTexture());
+
+	// Draw the road
 	DrawRoad();
+
+
+	//Draw Decors
+	Decor1->Draw();
+	Decor1->Materials[0].tex = Decor1texture;
+	Decor1->Materials[1].tex = Decor1texture;
+	Decor1->Materials[2].tex = Decor1texture;
+	
 
 	skyBox->draw();
 
