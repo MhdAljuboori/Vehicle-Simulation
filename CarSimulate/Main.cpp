@@ -49,6 +49,8 @@ Texture road;
 Texture ground;
 Texture buildingTexture;
 Texture buildingTexture1;
+Texture glassTexture;
+Texture glassTexture1;
 #pragma endregion
 
 #pragma region Decors variable
@@ -218,6 +220,8 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	ground.loadTexture("data/ground.bmp");
 	buildingTexture.loadTexture("data/Building2.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
+	glassTexture.loadTexture("data/glass.bmp");
+	glassTexture1.loadTexture("data/glass block.bmp");
 #pragma endregion
 	
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
@@ -229,7 +233,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 #pragma region draw methods
 #pragma region draw glass
 void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, float posZ=0, 
-				float angle=45, float rotX=1, float rotY=0, float rotZ=0)
+				float angle=45, float rotX=1, float rotY=0, float rotZ=0, int texture=-1)
 {
 	glPushMatrix();
 		glTranslatef(posX, posY, posZ);
@@ -238,12 +242,23 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 		if (rotY < 0)
 			glRotatef(rotY+15, 0, 1, 0);
 		glRotatef(angle, rotX, rotY, rotZ);
+		if (texture != -1)
+			glBindTexture(GL_TEXTURE_2D, texture);
 		glEnable(GL_BLEND);			// Turn Blending On
 		glBegin(GL_QUADS);
-		glColor3f(0, 0, 0.3);
+		if (texture == -1)
+			glColor3f(0, 0, 0.3);
+		if (texture != -1)
+			glTexCoord2f(0, 1);
 		glVertex3f(width, height, 0);
+		if (texture != -1)
+			glTexCoord2f(0, 0);
 		glVertex3f(width, -height, 0);
+		if (texture != -1)
+			glTexCoord2f(1, 0);
 		glVertex3f(-width, -height, 0);
+		if (texture != -1)
+			glTexCoord2f(1, 1);
 		glVertex3f(-width, height, 0);
 		glEnd();
 		glDisable(GL_BLEND);			// Turn Blending Off
@@ -532,7 +547,15 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	#pragma region draw natural
 	//Draw buildings
 	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, buildingTexture.getTexture());
+	DrawGlass(80, 30, 0, 175, -670, 0, 0, 0, 0, glassTexture.getTexture());
+	DrawGlass(80, 30, 0, 175, -830, 0, 0, 0, 0, glassTexture.getTexture());
+	DrawGlass(80, 30, 80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
+	DrawGlass(80, 30, -80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
+	DrawGlass(80, 80, 0, 205, -750, 90, 1, 0, 0, glassTexture.getTexture());
 	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, buildingTexture1.getTexture());
+	DrawGlass(80, 100, -200, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
+	DrawGlass(80, 100, -400, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
+	DrawGlass(80, 100, -340, 85, -672, 0, 0, 0, 0, glassTexture1.getTexture());
 
 	//DrawTowers
 	DrawTower(300, 180, 40);
