@@ -216,7 +216,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	woodTexture1.loadTexture("data/wood1.bmp");
 	road.loadTexture("data/road.bmp");
 	ground.loadTexture("data/ground.bmp");
-	buildingTexture.loadTexture("data/Building.bmp");
+	buildingTexture.loadTexture("data/Building2.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
 #pragma endregion
 	
