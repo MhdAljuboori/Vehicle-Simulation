@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CarSimulate", "CarSimulate\CarSimulate.vcxproj", "{52B99AEF-5AB6-4AFD-9924-F1C594D69383}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VehicleSimulation", "VehicleSimulation\VehicleSimulation.vcxproj", "{52B99AEF-5AB6-4AFD-9924-F1C594D69383}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
