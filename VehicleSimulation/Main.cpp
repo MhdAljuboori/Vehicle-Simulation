@@ -657,19 +657,23 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	else if(keys[VK_UP])
 	{
 		float r = toRadian(tank->rot.y);
-		if (IsNotCollide(tank->pos.x, tank->pos.z))
+		float dx = tank->pos.x - 2*sin(r);
+		float dz = tank->pos.z - 2*cos(r);
+		if (IsNotCollide(dx, dz))
 		{
-			tank->pos.x -= 2*sin(r);
-			tank->pos.z -= 2*cos(r);
+			tank->pos.x = dx;
+			tank->pos.z = dz;
 		}
 	}
 	else if(keys[VK_DOWN])
 	{
 		float r = toRadian(tank->rot.y);
-		if (IsNotCollide(tank->pos.x, tank->pos.z))
+		float dx = tank->pos.x + 2*sin(r);
+		float dz = tank->pos.z + 2*cos(r);
+		if (IsNotCollide(dx, dz))
 		{
-			tank->pos.x += 2*sin(r);
-			tank->pos.z += 2*cos(r);
+			tank->pos.x = dx;
+			tank->pos.z = dz;
 		}
 	}
 	#pragma endregion
