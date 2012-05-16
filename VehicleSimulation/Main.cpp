@@ -115,7 +115,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations	
 	quadric = gluNewQuadric();
 	
-#pragma region Fog
+	#pragma region Fog
 	glClearColor(0.5f,0.5f,0.5f,1.0f); // We'll Clear To The Color Of The Fog
 	glFogi(GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
 	glFogfv(GL_FOG_COLOR, fogColor); // Set Fog Color
@@ -124,19 +124,19 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
 	glEnable(GL_FOG);
-#pragma endregion
+	#pragma endregion
 
-#pragma region Global Light
+	#pragma region Global Light
 	glLightfv(GL_LIGHT0, GL_AMBIENT,  LightAmbient);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT0, GL_DIFFUSE,  LightDiffuse);		// Setup The Diffuse Light
 	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);		// Position The Light
-#pragma endregion
+	#pragma endregion
 
 	// Initialize camera
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
-#pragma region Terrain Load
+	#pragma region Terrain Load
 	// Terrain
 	terrain = new Terrain(keys, texture_num);
 	// Terrain Texture
@@ -145,9 +145,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 	// Draw Terrain
 	terrain->Draw(0,-71,0);
-#pragma endregion
+	#pragma endregion
 
-#pragma region Load Tank Model & Texture
+	#pragma region Load Tank Model & Texture
 	// Tank
 	tank = new Model_3DS();
 	// Load Model
@@ -156,9 +156,9 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	body.LoadBMP("Data/tanktexture/teext.bmp");
 	MGunM.LoadBMP("Data/tanktexture/GunM.bmp");
 	MGun.LoadBMP("Data/tanktexture/MGun.bmp");
-#pragma endregion
+	#pragma endregion
 
-#pragma region Decors
+	#pragma region Decors
 	Decor1 = new Model_3DS();
 	Decor2 = new Model_3DS();
 	Decor3 = new Model_3DS();
@@ -204,15 +204,15 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	Decor3->rot.y = 180;
 	Decor4->rot.y = 180;
 	Decor1texture.LoadBMP("Data/decorstextures/tank.bmp");
-#pragma endregion
+	#pragma endregion
 
-#pragma region Load Sky Box
+	#pragma region Load Sky Box
 	// Skybox with load texture
 	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
 					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
-#pragma endregion
+	#pragma endregion
 
-#pragma region Load Textures
+	#pragma region Load Textures
 	blackTexture.loadTexture("data/black.bmp");
 	woodTexture.loadTexture("data/wood.bmp");
 	woodTexture1.loadTexture("data/wood1.bmp");
@@ -222,7 +222,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	buildingTexture1.loadTexture("data/Building1.bmp");
 	glassTexture.loadTexture("data/glass.bmp");
 	glassTexture1.loadTexture("data/glass block.bmp");
-#pragma endregion
+	#pragma endregion
 	
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
@@ -488,6 +488,125 @@ void DrawRoad()
 #pragma endregion
 #pragma endregion
 
+#pragma region Collision
+bool IsNotCollide(float posX, float posZ)
+{
+	if ((posX > -40 && posX < 60) &&  (posZ > -50 && posZ < 50))
+		return true;
+	if ((posX > -20 && posX < 80) &&  (posZ > 30 && posZ < 130))
+		return true;
+	if ((posX > 30 && posX < 130) &&  (posZ > 90 && posZ < 190))
+		return true;
+	if ((posX > 100 && posX < 200) &&  (posZ > 145 && posZ < 245))
+		return true;
+	if ((posX > 165 && posX < 265) &&  (posZ > 165 && posZ < 265))
+		return true;
+	if ((posX > 230 && posX < 330) &&  (posZ > 185 && posZ < 285))
+		return true;
+	if ((posX > 320 && posX < 420) &&  (posZ > 195 && posZ < 295))
+		return true;
+	if ((posX > 320 && posX < 420) &&  (posZ > 290 && posZ < 390))
+		return true;
+	if ((posX > 310 && posX < 410) &&  (posZ > 380 && posZ < 480))
+		return true;
+	if ((posX > 280 && posX < 380) &&  (posZ > 380 && posZ < 480))
+		return true;
+	if ((posX > 170 && posX < 270) &&  (posZ > 470 && posZ < 570))
+		return true;
+	if ((posX > 275 && posX < 375) &&  (posZ > 470 && posZ < 570))
+		return true;
+	if ((posX > 245 && posX < 345) &&  (posZ > 530 && posZ < 630))
+		return true;
+	if ((posX > 190 && posX < 290) &&  (posZ > 580 && posZ < 680))
+		return true;
+	if ((posX > 120 && posX < 220) &&  (posZ > 610 && posZ < 710))
+		return true;
+	if ((posX > 30 && posX < 130) &&  (posZ > 595 && posZ < 695))
+		return true;
+	if ((posX > -50 && posX < 50) &&  (posZ > 565 && posZ < 665))
+		return true;
+	if ((posX > -120 && posX < -20) &&  (posZ > 535 && posZ < 635))
+		return true;
+	if ((posX > -215 && posX < -115) &&  (posZ > 505 && posZ < 605))
+		return true;
+	if ((posX > -295 && posX < -195) &&  (posZ > 450 && posZ < 550))
+		return true;
+	if ((posX > -365 && posX < -265) &&  (posZ > 400 && posZ < 500))
+		return true;
+	if ((posX > -440 && posX < -340) &&  (posZ > 350 && posZ < 450))
+		return true;
+	if ((posX > -610 && posX < -510) &&  (posZ > 200 && posZ < 300))
+		return true;
+	if ((posX > -530 && posX < -430) &&  (posZ > 265 && posZ < 365))
+		return true;
+	if ((posX > -610 && posX < -510) &&  (posZ > 180 && posZ < 280))
+		return true;
+	if ((posX > -665 && posX < -565) &&  (posZ > 150 && posZ < 250))
+		return true;
+	if ((posX > -705 && posX < -605) &&  (posZ > 75 && posZ < 175))
+		return true;
+	if ((posX > -750 && posX < -650) &&  (posZ > 10 && posZ < 110))
+		return true;
+	if ((posX > -780 && posX < -680) &&  (posZ > -75 && posZ < 25))
+		return true;
+	if ((posX > -800 && posX < -700) &&  (posZ > -150 && posZ < -50))
+		return true;
+	if ((posX > -800 && posX < -700) &&  (posZ > -220 && posZ < -120))
+		return true;
+	if ((posX > -775 && posX < -675) &&  (posZ > -310 && posZ < -210))
+		return true;
+	if ((posX > -730 && posX < -630) &&  (posZ > -375 && posZ < -275))
+		return true;
+	if ((posX > -685 && posX < -585) &&  (posZ > -450 && posZ < -350))
+		return true;
+	if ((posX > -620 && posX < -520) &&  (posZ > -505 && posZ < -405))
+		return true;
+	if ((posX > -530 && posX < -430) &&  (posZ > -550 && posZ < -450))
+		return true;
+	if ((posX > -480 && posX < -380) &&  (posZ > 295 && posZ < 395))
+		return true;
+	if ((posX > -460 && posX < -360) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > -410 && posX < -310) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > -310 && posX < -210) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > -210 && posX < -110) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > -110 && posX < -10) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > -10 && posX < 90) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > 90 && posX < 190) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > 190 && posX < 290) &&  (posZ > -560 && posZ < -460))
+		return true;
+	if ((posX > 250 && posX < 350) &&  (posZ > -520 && posZ < -420))
+		return true;
+	if ((posX > 320 && posX < 420) &&  (posZ > -455 && posZ < -355))
+		return true;
+	if ((posX > 350 && posX < 450) &&  (posZ > -390 && posZ < -290))
+		return true;
+	if ((posX > 330 && posX < 430) &&  (posZ > -300 && posZ < -200))
+		return true;
+	if ((posX > 300 && posX < 400) &&  (posZ > -260 && posZ < -160))
+		return true;
+	if ((posX > 240 && posX < 340) &&  (posZ > -240 && posZ < -140))
+		return true;
+	if ((posX > 170 && posX < 270) &&  (posZ > -210 && posZ < -110))
+		return true;
+	if ((posX > 110 && posX < 210) &&  (posZ > -175 && posZ < -75))
+		return true;
+	if ((posX > 50 && posX < 150) &&  (posZ > -155 && posZ < -55))
+		return true;
+	if ((posX > -5 && posX < 95) &&  (posZ > -125 && posZ < -25))
+		return true;
+	if ((posX > -54 && posX < 55) &&  (posZ > -85 && posZ < -15))
+		return true;
+	return false;
+}
+#pragma endregion
+
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
@@ -519,29 +638,40 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	#pragma region Tank Move
 	if(keys[VK_LEFT])
 	{
-		tank->rot.y += 1;
-		if (CClicked)
-			myCamera->RotateY(1);
+		if (IsNotCollide(tank->pos.x, tank->pos.z))
+		{
+			tank->rot.y += 1;
+			if (CClicked)
+				myCamera->RotateY(1);
+		}
 	}
 	else if(keys[VK_RIGHT])
 	{
-		tank->rot.y -= 1;
-		if (CClicked)
-			myCamera->RotateY(-1);
+		if (IsNotCollide(tank->pos.x, tank->pos.z))
+		{
+			tank->rot.y -= 1;
+			if (CClicked)
+				myCamera->RotateY(-1);
+		}
 	}
 	else if(keys[VK_UP])
 	{
 		float r = toRadian(tank->rot.y);
-		tank->pos.x -= 2*sin(r);
-		tank->pos.z -= 2*cos(r);
+		if (IsNotCollide(tank->pos.x, tank->pos.z))
+		{
+			tank->pos.x -= 2*sin(r);
+			tank->pos.z -= 2*cos(r);
+		}
 	}
 	else if(keys[VK_DOWN])
 	{
 		float r = toRadian(tank->rot.y);
-		tank->pos.x += 2*sin(r);
-		tank->pos.z += 2*cos(r);
+		if (IsNotCollide(tank->pos.x, tank->pos.z))
+		{
+			tank->pos.x += 2*sin(r);
+			tank->pos.z += 2*cos(r);
+		}
 	}
-	terrain->draw();
 	#pragma endregion
 
 	#pragma region draw natural
@@ -597,7 +727,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	Decor6->Materials[1].tex = Decor1texture;
 	Decor6->Materials[2].tex = Decor1texture;
 	#pragma endregion
-
+	terrain->draw();
 	skyBox->draw();
 	#pragma endregion
 	
