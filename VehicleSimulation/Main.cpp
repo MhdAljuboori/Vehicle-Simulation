@@ -35,7 +35,7 @@ LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
 //==========================================
 int texture_num;
-bool CClicked = FALSE;
+bool OneClicked = FALSE;
 
 Camera *myCamera;
 Terrain* terrain;
@@ -613,7 +613,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glLoadIdentity();// Reset The Current Modelview Matrix
 	
 	#pragma region Camera Move
-	if (!CClicked)
+	if (!OneClicked)
 	{
 		if(keys['A'])
 			myCamera->RotateY(0.5);
@@ -641,7 +641,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		if (IsNotCollide(tank->pos.x, tank->pos.z))
 		{
 			tank->rot.y += 1;
-			if (CClicked)
+			if (OneClicked)
 				myCamera->RotateY(1);
 		}
 	}
@@ -650,7 +650,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		if (IsNotCollide(tank->pos.x, tank->pos.z))
 		{
 			tank->rot.y -= 1;
-			if (CClicked)
+			if (OneClicked)
 				myCamera->RotateY(-1);
 		}
 	}
@@ -758,7 +758,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	#pragma endregion
 
 	#pragma region Camera on Vehicle
-	if (CClicked)
+	if (OneClicked)
 	{
 		myCamera->Position.setVector3D(tank->pos.x, tank->pos.y+20, tank->pos.z);
 		
@@ -1103,15 +1103,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					return 0;						// Quit If Window Was Not Created
 				}
 			}
-			if (keys['C'] && !CClicked)
+			if (keys['2'] && !OneClicked)
 			{
-				CClicked = TRUE;
+				OneClicked = TRUE;
 				myCamera->Reset();
 				myCamera->RotateY(tank->rot.y);
 			}
-			else if (keys['V'] && CClicked)
+			else if (keys['1'] && OneClicked)
 			{
-				CClicked = FALSE;
+				OneClicked = FALSE;
 				myCamera->Position.setY(myCamera->Position.getY()+100);
 				myCamera->View.setY(-2);
 			}
