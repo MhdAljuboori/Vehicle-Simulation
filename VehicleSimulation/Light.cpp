@@ -13,11 +13,11 @@ Light::Light()
 	spotCutOff = 0;
 	lightType = Spot;
 	lightName = GL_LIGHT0;
-	glEnable(lightName);
+	disableLight();
 }
 
-Light::Light(float* amb, float* spe, float* dif, float* pos,
-			LightType lightTy, float* spotdir, float spotcut)
+Light::Light(float* amb, float* spe, float* dif, float* pos, 
+	float* spotdir, float spotcut, GLenum lightName)
 {
 	for(int i = 0; i<4; i++)
 	{
@@ -27,10 +27,24 @@ Light::Light(float* amb, float* spe, float* dif, float* pos,
 		position[i] = pos[i];
 		spotDirection[i] = spotdir[i];
 	}
-
-	lightType = lightTy;
+	lightType = Spot;
 	spotCutOff = spotcut;
-	glEnable(lightName);
+	this->lightName = lightName;
+	disableLight();
+}
+
+Light::Light(float* amb, float* spe, float* dif, float* pos, GLenum lightName)
+{
+	for(int i = 0; i<4; i++)
+	{
+		ambient[i] = amb[i];
+		specular[i] = spe[i];
+		diffuse[i] = dif[i];
+		position[i] = pos[i];
+	}
+	lightType = Directional;
+	this->lightName = lightName;
+	disableLight();
 }
 
 

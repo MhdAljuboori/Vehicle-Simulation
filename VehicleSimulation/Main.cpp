@@ -11,8 +11,8 @@
 #include "Model_3DS.h"
 #include "Environment.h"
 #include "Light.h"
-//include lib file
 
+//include lib file
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glut32.lib")
 #pragma comment(lib,"glu32.lib")
@@ -40,6 +40,7 @@ bool OneClicked = FALSE;
 Camera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
+Light* light;
 
 #pragma region texture variable
 Texture blackTexture;
@@ -68,6 +69,9 @@ Model_3DS* tank;
 GLTexture body;
 GLTexture MGunM;
 GLTexture MGun;
+
+float speed = 0;
+float acceleration = 0.02;
 #pragma endregion
 
 #pragma region Fog variable
@@ -108,7 +112,7 @@ GLfloat LightPosition[]=	{ 0.0f, 200.0f, 0.0f, 1.0f };
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// Black Background
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
@@ -127,10 +131,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	#pragma endregion
 
 	#pragma region Global Light
-	glLightfv(GL_LIGHT0, GL_AMBIENT,  LightAmbient);		// Setup The Ambient Light
-	glLightfv(GL_LIGHT0, GL_DIFFUSE,  LightDiffuse);		// Setup The Diffuse Light
-	glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpecular);
-	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);		// Position The Light
+	light = new Light(LightAmbient, LightSpecular, LightDiffuse, LightPosition, GL_LIGHT0);
+	light->setUpLight();
+	#pragma endregion
+
+	#pragma region Tank Lights	
 	#pragma endregion
 
 	// Initialize camera
@@ -224,7 +229,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glassTexture1.loadTexture("data/glass block.bmp");
 	#pragma endregion
 	
-	glColor4f(1.0f, 1.0f, 1.0f, 0.5);					// Full Brightness.  50% Alpha
+	//glColor4f(0.0f, 0.0f, 0.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
 
 	return true;										// Initialization Went OK
@@ -640,40 +645,61 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		if (IsNotCollide(tank->pos.x, tank->pos.z))
 		{
-			tank->rot.y += 1;
+			tank->rot.y += 0.9;
 			if (OneClicked)
-				myCamera->RotateY(1);
+				myCamera->RotateY(0.9);
 		}
 	}
 	else if(keys[VK_RIGHT])
 	{
 		if (IsNotCollide(tank->pos.x, tank->pos.z))
 		{
-			tank->rot.y -= 1;
+			tank->rot.y -= 0.9;
 			if (OneClicked)
-				myCamera->RotateY(-1);
+				myCamera->RotateY(-0.9);
 		}
 	}
-	else if(keys[VK_UP])
+	if(keys[VK_UP])
 	{
 		float r = toRadian(tank->rot.y);
-		float dx = tank->pos.x - 2*sin(r);
-		float dz = tank->pos.z - 2*cos(r);
+		speed += acceleration;
+		float dx = tank->pos.x - speed*sin(r);
+		float dz = tank->pos.z - speed*cos(r);
 		if (IsNotCollide(dx, dz))
 		{
 			tank->pos.x = dx;
 			tank->pos.z = dz;
 		}
 	}
-	else if(keys[VK_DOWN])
+	else
+	{
+		if (speed > 0)
+		{
+			float r = toRadian(tank->rot.y);
+			speed -= acceleration;
+			float dx = tank->pos.x - speed*sin(r);
+			float dz = tank->pos.z - speed*cos(r);
+			if (IsNotCollide(dx, dz))
+			{
+				tank->pos.x = dx;
+				tank->pos.z = dz;
+			}
+		}
+	}
+	if(keys[VK_DOWN])
 	{
 		float r = toRadian(tank->rot.y);
-		float dx = tank->pos.x + 2*sin(r);
-		float dz = tank->pos.z + 2*cos(r);
-		if (IsNotCollide(dx, dz))
+		if (speed > 0)
+			speed -= acceleration;
+		else
 		{
-			tank->pos.x = dx;
-			tank->pos.z = dz;
+			float dx = tank->pos.x + 2*sin(r);
+			float dz = tank->pos.z + 2*cos(r);
+			if (IsNotCollide(dx, dz))
+			{
+				tank->pos.x = dx;
+				tank->pos.z = dz;
+			}
 		}
 	}
 	#pragma endregion
@@ -1125,13 +1151,15 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			{
 				glDisable(GL_FOG);		// Disable GL_FOG
 				glEnable(GL_LIGHTING);
-				glEnable(GL_LIGHT0);
+				//glEnable(GL_LIGHT0);
+				light->enableLight();
 			}
 			else if (keys['O'])
 			{
 				glDisable(GL_FOG);
+				light->disableLight();
 				glDisable(GL_LIGHTING);
-				glDisable(GL_LIGHT0);
+				//glDisable(GL_LIGHT0);
 			}
 		}
 	}

@@ -11,8 +11,9 @@ class Light
 {
 public:
 	Light();
-	Light(float* ambient, float* specular, float* diffuse, float* position,
-		LightType lightType, float* spotdir, float spotcutoff);
+	Light(float* amb, float* spe, float* dif, float* pos, 
+		float* spotdir, float spotcut, GLenum lightName);
+	Light(float* amb, float* spe, float* dif, float* pos, GLenum lightName);
 	void setUpLight();
 
 	void setAmbient(float x,float y,float z,float w);
