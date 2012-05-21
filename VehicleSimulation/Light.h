@@ -20,13 +20,14 @@ public:
 	void setSpecular(float x,float y,float z,float w);
 	void setDiffuse(float x,float y,float z,float w);
 	void setPosition(float x,float y,float z,float w);
+	void setSpotDirection(float x,float y,float z,float w);
 
 	float* getAmbient() { return &ambient[0]; }
 	float* getSpecular() { return &specular[0]; }
 	float* getDiffuse() { return &diffuse[0]; }
 	float* getPosition() { return &position[0]; }
 
-	bool getLightState() { return lightOn; }
+	bool isLightOn() { return lightOn; }
 
 	void enableLight();
 	void disableLight();

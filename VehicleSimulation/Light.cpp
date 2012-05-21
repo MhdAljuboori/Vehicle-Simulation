@@ -52,24 +52,24 @@ void Light::setUpLight()
 {
 	if( lightType == Spot)
 	{
-		glLightfv(lightName,GL_AMBIENT,&ambient[0]);
-		glLightfv(lightName,GL_SPECULAR,&specular[0]);
-		glLightfv(lightName,GL_DIFFUSE,&diffuse[0]);
-		glLightfv(lightName,GL_POSITION,&position[0]);
-		glLightfv(lightName,GL_SPOT_DIRECTION,&spotDirection[0]);
+		glLightfv(lightName,GL_AMBIENT,ambient);
+		glLightfv(lightName,GL_SPECULAR,specular);
+		glLightfv(lightName,GL_DIFFUSE,diffuse);
+		glLightfv(lightName,GL_POSITION,position);
+		glLightfv(lightName,GL_SPOT_DIRECTION,spotDirection);
 		glLightf(lightName,GL_SPOT_CUTOFF,spotCutOff);
-		glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
-		glEnable(lightName);
+		//glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
+		//glEnable(lightName);
 	}
 
 	else
 	{
-		glLightfv(lightName,GL_AMBIENT,&ambient[0]);
-		glLightfv(lightName,GL_SPECULAR,&specular[0]);
-		glLightfv(lightName,GL_DIFFUSE,&diffuse[0]);
-		glLightfv(lightName,GL_POSITION,&position[0]);
-		glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
-		glEnable(lightName);
+		glLightfv(lightName,GL_AMBIENT,ambient);
+		glLightfv(lightName,GL_SPECULAR,specular);
+		glLightfv(lightName,GL_DIFFUSE,diffuse);
+		glLightfv(lightName,GL_POSITION,position);
+		//glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
+		//glEnable(lightName);
 	}
 }
 
@@ -102,17 +102,15 @@ void Light::setPosition(float x,float y,float z,float w)
 	position[0] = x;
 	position[1] = y;
 	position[2] = z;
-	if((lightType == Spot) && (w >0 && w<1))
-	{
-		position[3] = w;
-	}
-	else
-		if( (lightType == Directional) && (w == 0))
-		{
-			position[3] = w;
-		}
-		else
-			position[3] = 0;
+	position[3] = w;
+}
+
+void Light::setSpotDirection(float x,float y,float z,float w)
+{
+	spotDirection[0] = x;
+	spotDirection[1] = y;
+	spotDirection[2] = z;
+	spotDirection[3] = w;
 }
 
 void Light::enableLight()
