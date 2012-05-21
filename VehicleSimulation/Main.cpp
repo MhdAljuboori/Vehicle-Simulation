@@ -152,9 +152,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 		tank_LightPosition, tank_LightDirection, 10, GL_LIGHT1);
 	tank_Rightlight = new Light(tank_LightAmbient,tank_LightSpecular,tank_LightDiffuse,
 		tank_LightPosition,tank_LightDirection,10,GL_LIGHT2);
-	glEnable(GL_LIGHTING);
-	tank_Leftlight->enableLight();
-	tank_Rightlight->enableLight();
 	#pragma endregion
 
 	#pragma region Terrain Load
@@ -1099,7 +1096,6 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			{
 				glDisable(GL_FOG);		// Disable GL_FOG
 				glEnable(GL_LIGHTING);
-				//glEnable(GL_LIGHT0);
 				light->enableLight();
 			}
 			else if (keys['O'])
@@ -1107,7 +1103,19 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				glDisable(GL_FOG);
 				light->disableLight();
 				glDisable(GL_LIGHTING);
-				//glDisable(GL_LIGHT0);
+			}
+			else if (keys['M'])
+			{
+				glEnable(GL_LIGHTING);
+				tank_Leftlight->enableLight();
+				tank_Rightlight->enableLight();
+			}
+			else if (keys['N'])
+			{
+				if (!light->isLightOn())
+					glDisable(GL_LIGHTING);
+				tank_Leftlight->disableLight();
+				tank_Rightlight->disableLight();
 			}
 			#pragma endregion
 			#pragma region Tank Move
