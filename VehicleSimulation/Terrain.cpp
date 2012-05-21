@@ -121,13 +121,13 @@ void Terrain::Draw(float posX, float posY, float posZ)
 		glBegin(GL_QUAD_STRIP);
 		for (int j=3 ; j<=mapSize-3 ; j++)
 		{
-			Vector3D normal;
+			/*Vector3D normal;
 			if (j+1 <=mapSize-3)
 				normal = CalcNormal(Vector3D(j+posX, GetValue(j,i)+posY, i+posZ), 
 							Vector3D(j+posX, GetValue(j,i+1)+posY, i+1+posZ), 
 							Vector3D(j+1+posX, GetValue(j+1,i)+posY, i+posZ));
 
-			glNormal3f(normal.getX(), normal.getY(), normal.getZ());
+			glNormal3f(normal.getX(), normal.getY(), normal.getZ());*/
 			glTexCoord2f(j*stepSize,i*stepSize);
 			glVertex3f(j+posX, GetValue(j,i)+posY, i+posZ);
 			
