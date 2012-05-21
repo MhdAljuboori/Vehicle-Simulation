@@ -72,6 +72,22 @@ GLTexture MGun;
 
 float speed = 0;
 float acceleration = 0.02;
+
+Light *tank_Leftlight;
+Light *tank_Rightlight;
+
+GLfloat tank_LightAmbient[]   =	{ 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat tank_LightDiffuse[]   =	{ 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat tank_LightSpecular[]  = { 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat tank_LightPosition[]  =	{ 0.0f, 0.0f, 0.0f, 1.0f };
+GLfloat tank_LightDirection[] = { 0.0f, 0.0f, -1.0f, 0.0f}; 
+#pragma endregion
+
+#pragma region Light variable
+GLfloat LightAmbient[]  =	{ 0.5f, 0.5f, 0.0f, 1.0f };
+GLfloat LightDiffuse[]  =	{ 0.0f, 0.0f, 1.0f, 1.0f };
+GLfloat LightSpecular[] =   { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat LightPosition[] =	{ 0.0f, 200.0f, 0.0f, 1.0f };
 #pragma endregion
 
 #pragma region Fog variable
@@ -102,23 +118,19 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 }
 GLUquadric *quadric ;
 
-#pragma region Light variable
-GLfloat LightAmbient[]=		{ 0.5f, 0.5f, 0.0f, 1.0f };
-GLfloat LightDiffuse[]=		{ 0.0f, 0.0f, 1.0f, 1.0f };
-GLfloat LightSpecular[] =   { 1.0, 1.0, 1.0, 1.0 };
-GLfloat LightPosition[]=	{ 0.0f, 200.0f, 0.0f, 1.0f };
-#pragma endregion
-
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Full brightness with apha 50%
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations	
 	quadric = gluNewQuadric();
 	
+	// Initialize camera
+	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
+
 	#pragma region Fog
 	glClearColor(0.5f,0.5f,0.5f,1.0f); // We'll Clear To The Color Of The Fog
 	glFogi(GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
@@ -135,11 +147,15 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	light->setUpLight();
 	#pragma endregion
 
-	#pragma region Tank Lights	
+	#pragma region Tank Lights
+	tank_Leftlight = new Light(tank_LightAmbient, tank_LightSpecular, tank_LightDiffuse,
+		tank_LightPosition, tank_LightDirection, 10, GL_LIGHT1);
+	tank_Rightlight = new Light(tank_LightAmbient,tank_LightSpecular,tank_LightDiffuse,
+		tank_LightPosition,tank_LightDirection,10,GL_LIGHT2);
+	glEnable(GL_LIGHTING);
+	tank_Leftlight->enableLight();
+	tank_Rightlight->enableLight();
 	#pragma endregion
-
-	// Initialize camera
-	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
 	#pragma region Terrain Load
 	// Terrain
@@ -229,7 +245,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glassTexture1.loadTexture("data/glass block.bmp");
 	#pragma endregion
 	
-	//glColor4f(0.0f, 0.0f, 0.0f, 0.5);					// Full Brightness.  50% Alpha
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
 
 	return true;										// Initialization Went OK
@@ -274,7 +289,7 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 #pragma region draw cube
 void DrawCube(float width, float height, float length, 
 				float posX=0, float posY=0, float posZ=0, 
-				float angle=0, float rotX=0, float rotY=0, float rotZ=0, 
+				float angle=0, float rotX=0, float rotY=0, float rotZ=0, bool setNormal = true,
 				int frontTex=-1, int backTex=-1, int rightTex=-1, int leftTex=-1, 
 				int upTex=-1, int downTex=-1)
 {
@@ -287,7 +302,8 @@ void DrawCube(float width, float height, float length,
 		glBindTexture(GL_TEXTURE_2D, frontTex);
 	glBegin(GL_QUADS);
 		//front
-		glNormal3f(0, 0, 1);
+		if (setNormal)
+			glNormal3f(0, 0, 1);
 		if (frontTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,length);
@@ -306,7 +322,8 @@ void DrawCube(float width, float height, float length,
 		glBindTexture(GL_TEXTURE_2D, backTex);
 	glBegin(GL_QUADS);
 		//back
-		glNormal3f(0, 0, -1);
+		if (setNormal)
+			glNormal3f(0, 0, -1);
 		if (backTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,-length);
@@ -325,7 +342,8 @@ void DrawCube(float width, float height, float length,
 		glBindTexture(GL_TEXTURE_2D, rightTex);
 	glBegin(GL_QUADS);
 		//right
-		glNormal3f(1, 0, 0);
+		if (setNormal)
+			glNormal3f(1, 0, 0);
 		if (rightTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,-length);
@@ -344,7 +362,8 @@ void DrawCube(float width, float height, float length,
 		glBindTexture(GL_TEXTURE_2D, leftTex);
 	glBegin(GL_QUADS);
 		//left
-		glNormal3f(-1, 0, 0);
+		if (setNormal)
+			glNormal3f(-1, 0, 0);
 		if (leftTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(-width,-height,length);
@@ -363,7 +382,8 @@ void DrawCube(float width, float height, float length,
 		glBindTexture(GL_TEXTURE_2D, upTex);
 	glBegin(GL_QUADS);
 		//up
-		glNormal3f(0, 1, 0);
+		if (setNormal)
+			glNormal3f(0, 1, 0);
 		if (upTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,height,length);
@@ -382,7 +402,8 @@ void DrawCube(float width, float height, float length,
 		glBindTexture(GL_TEXTURE_2D, downTex);
 	glBegin(GL_QUADS);
 		//down
-		glNormal3f(0, -1, 0);
+		if (setNormal)
+			glNormal3f(0, -1, 0);
 		if (downTex != -1)
 			glTexCoord2f(1, 0);
 		glVertex3f(width,-height,-length);
@@ -409,30 +430,30 @@ float toRadian(float d)
 void DrawTower(float posX, float posY, float posZ)
 {
 	//300, 180, 40
-	DrawCube(4, 50, 4, posX-20, posY-80, posZ, 5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+	DrawCube(4, 50, 4, posX-20, posY-80, posZ, 5, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
 		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
-	DrawCube(4, 50, 4, posX-20, posY-80, posZ-40, -5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
-		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
-
-	DrawCube(2, 50, 2, posX-20, posY-80, posZ-20, 28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
-		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
-	DrawCube(2, 50, 2, posX-20, posY-80, posZ-20, -28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+	DrawCube(4, 50, 4, posX-20, posY-80, posZ-40, -5, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
 		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
 
-	DrawCube(4, 50, 4, posX+20, posY-80, posZ-40, -5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+	DrawCube(2, 50, 2, posX-20, posY-80, posZ-20, 28, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
 		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
-	DrawCube(4, 50, 4, posX+20, posY-80, posZ, 5, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
-		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
-
-	DrawCube(2, 50, 2, posX+20, posY-80, posZ-20, -28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
-		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
-	DrawCube(2, 50, 2, posX+20, posY-80, posZ-20, 28, 1, 0, 0, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+	DrawCube(2, 50, 2, posX-20, posY-80, posZ-20, -28, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
 		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
 
-	DrawCube(30, 35, 30, posX, posY, posZ-20, 0, 0, 0, 0, woodTexture.getTexture(), woodTexture.getTexture(),
+	DrawCube(4, 50, 4, posX+20, posY-80, posZ-40, -5, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+	DrawCube(4, 50, 4, posX+20, posY-80, posZ, 5, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+
+	DrawCube(2, 50, 2, posX+20, posY-80, posZ-20, -28, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+	DrawCube(2, 50, 2, posX+20, posY-80, posZ-20, 28, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
+		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
+
+	DrawCube(30, 35, 30, posX, posY, posZ-20, 0, 0, 0, 0, true, woodTexture.getTexture(), woodTexture.getTexture(),
 			woodTexture.getTexture(), woodTexture.getTexture(), 
 			woodTexture.getTexture(), woodTexture.getTexture());
-	DrawCube(40, 2, 40, posX, posY+30, posZ-20, 0, 0, 0, 0, woodTexture.getTexture(), woodTexture.getTexture(),
+	DrawCube(40, 2, 40, posX, posY+30, posZ-20, 0, 0, 0, 0, true, woodTexture.getTexture(), woodTexture.getTexture(),
 			woodTexture.getTexture(), woodTexture.getTexture(), 
 			woodTexture.getTexture(), woodTexture.getTexture());
 }
@@ -440,55 +461,55 @@ void DrawTower(float posX, float posY, float posZ)
 #pragma region draw road
 void DrawRoad()
 {
-	DrawCube(50, 1, 60, 208, -14.7, 647, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 70, 285, -14.9, 590, -40, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, 340, -15, 505, -20, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 363, -14.9, 432, -15, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 373, -14.8, 352, -5, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 20, 375, -14.7, 290, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 20, 368, -14.6, 273, 20, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 344, -14.8, 250, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 272, -14.7, 230, 80, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, 265, -15.0, -178, -70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 350, -14.9, -220, -50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 382, -14.8, -262, -30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 400, -14.6, -350, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 200, -14.1, -510, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 190, 80, -15, -510, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, -495, -14.9, -480, 110, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -570, -14.9, -452, 110, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -608, -14.8, -430, 130, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -635, -14.7, -400, 150, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -668, -14.6, -345, 150, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -726, -15, -242, 150, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -750, -14.9, -157, 0, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -742, -14.8, -62, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -742, -14.7, -62, 10, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -710, -14.6, 30, 30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 90, -645, -15, 140, 30, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, -576, -14.9, 235, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, -500, -15, 300, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, -405, -15, 378, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 100, -275, -15, 486, 50, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -185, -14.9, 550, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, -95, -15, 582, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 208, -14.7, 647, -70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 70, 285, -14.9, 590, -40, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 340, -15, 505, -20, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 363, -14.9, 432, -15, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 373, -14.8, 352, -5, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 20, 375, -14.7, 290, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 20, 368, -14.6, 273, 20, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 344, -14.8, 250, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 272, -14.7, 230, 80, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, 265, -15.0, -178, -70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 350, -14.9, -220, -50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 382, -14.8, -262, -30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.6, -350, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 200, -14.1, -510, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 190, 80, -15, -510, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -495, -14.9, -480, 110, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -570, -14.9, -452, 110, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -608, -14.8, -430, 130, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -635, -14.7, -400, 150, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -668, -14.6, -345, 150, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -726, -15, -242, 150, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -750, -14.9, -157, 0, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -742, -14.8, -62, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -742, -14.7, -62, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -710, -14.6, 30, 30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 90, -645, -15, 140, 30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -576, -14.9, 235, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -500, -15, 300, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, -405, -15, 378, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 100, -275, -15, 486, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -185, -14.9, 550, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, -95, -15, 582, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
 }
 #pragma endregion
 #pragma endregion
@@ -616,103 +637,17 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();// Reset The Current Modelview Matrix
-	
-	#pragma region Camera Move
-	if (!OneClicked)
-	{
-		if(keys['A'])
-			myCamera->RotateY(0.5);
-		if(keys['D'])
-			myCamera->RotateY(-0.5);
-		if(keys['W'])
-			myCamera->MoveForward(2.5);
-		if(keys['S'])
-			myCamera->MoveForward(-2.5);
-		if(keys['X'])
-			myCamera->RotateX(0.5);	
-		if(keys['Z'])
-			myCamera->RotateX(-0.5);
-		if(keys['F'])
-			myCamera->Move(Vector3D(0,-4,0));
-		if(keys['R'])
-			myCamera->Move(Vector3D(0,4,0));
-	}
 	myCamera->Render();
-	#pragma endregion
-
-	#pragma region Tank Move
-	if(keys[VK_LEFT])
-	{
-		if (IsNotCollide(tank->pos.x, tank->pos.z))
-		{
-			tank->rot.y += 0.9;
-			if (OneClicked)
-				myCamera->RotateY(0.9);
-		}
-	}
-	else if(keys[VK_RIGHT])
-	{
-		if (IsNotCollide(tank->pos.x, tank->pos.z))
-		{
-			tank->rot.y -= 0.9;
-			if (OneClicked)
-				myCamera->RotateY(-0.9);
-		}
-	}
-	if(keys[VK_UP])
-	{
-		float r = toRadian(tank->rot.y);
-		speed += acceleration;
-		float dx = tank->pos.x - speed*sin(r);
-		float dz = tank->pos.z - speed*cos(r);
-		if (IsNotCollide(dx, dz))
-		{
-			tank->pos.x = dx;
-			tank->pos.z = dz;
-		}
-	}
-	else
-	{
-		if (speed > 0)
-		{
-			float r = toRadian(tank->rot.y);
-			speed -= acceleration;
-			float dx = tank->pos.x - speed*sin(r);
-			float dz = tank->pos.z - speed*cos(r);
-			if (IsNotCollide(dx, dz))
-			{
-				tank->pos.x = dx;
-				tank->pos.z = dz;
-			}
-		}
-	}
-	if(keys[VK_DOWN])
-	{
-		float r = toRadian(tank->rot.y);
-		if (speed > 0)
-			speed -= acceleration;
-		else
-		{
-			float dx = tank->pos.x + 2*sin(r);
-			float dz = tank->pos.z + 2*cos(r);
-			if (IsNotCollide(dx, dz))
-			{
-				tank->pos.x = dx;
-				tank->pos.z = dz;
-			}
-		}
-	}
-	#pragma endregion
 
 	#pragma region draw natural
 	//Draw buildings
-	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, buildingTexture.getTexture());
+	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, true, buildingTexture.getTexture());
 	DrawGlass(80, 30, 0, 175, -670, 0, 0, 0, 0, glassTexture.getTexture());
 	DrawGlass(80, 30, 0, 175, -830, 0, 0, 0, 0, glassTexture.getTexture());
 	DrawGlass(80, 30, 80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
 	DrawGlass(80, 30, -80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
 	DrawGlass(80, 80, 0, 205, -750, 90, 1, 0, 0, glassTexture.getTexture());
-	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, buildingTexture1.getTexture());
+	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, true, buildingTexture1.getTexture());
 	DrawGlass(80, 100, -200, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
 	DrawGlass(80, 100, -400, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
 	DrawGlass(80, 100, -340, 85, -672, 0, 0, 0, 0, glassTexture1.getTexture());
@@ -722,9 +657,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	DrawTower(-280, 220, 200);
 
 	//Draw Ground
-	DrawCube(100, 1, 80, 555, -16, 205, 0, 0, 0, 0, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
+	DrawCube(100, 1, 80, 555, -16, 205, 0, 0, 0, 0, true, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
 		ground.getTexture(), ground.getTexture(), ground.getTexture());
-	DrawCube(80, 1, 80, 575, -16, 45, 0, 0, 0, 0, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
+	DrawCube(80, 1, 80, 575, -16, 45, 0, 0, 0, 0, true, ground.getTexture(), ground.getTexture(), ground.getTexture(), 
 		ground.getTexture(), ground.getTexture(), ground.getTexture());
 
 	// Draw the road
@@ -760,7 +695,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	terrain->draw();
 	skyBox->draw();
 	#pragma endregion
-	
 	#pragma region Tank drawing
 	Model_3DS::Color ambient;
 	ambient.a = 1;
@@ -775,14 +709,25 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	diffuse.g = 1;
 	diffuse.r = 1;
 	tank->Materials[0].diffuse = diffuse;
-
+	#pragma region Tank Light
+	if (tank_Leftlight->isLightOn())
+	{
+		tank_Leftlight->setPosition(tank->pos.x+20, tank->pos.y, tank->pos.z+10, 1);
+		tank_Rightlight->setPosition(tank->pos.x-20, tank->pos.y, tank->pos.z+10, 1);
+		float r = toRadian(tank->rot.y);
+		tank_Leftlight->setSpotDirection(sin(r)*-1, 0,cos(r)*-1, 0);
+		tank_Rightlight->setSpotDirection(sin(r)*-1, 0,cos(r)*-1, 0);
+		tank_Leftlight->setUpLight();
+		tank_Rightlight->setUpLight();
+	}
+	#pragma endregion
     tank->Draw();
+	tank->shownormals;
 	tank->Materials[0].tex = body;
 	tank->Materials[3].tex = MGun;
 	tank->Materials[4].tex = MGunM;
 	tank->Materials[5].tex = MGun;
 	#pragma endregion
-
 	#pragma region Camera on Vehicle
 	if (OneClicked)
 	{
@@ -1129,6 +1074,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					return 0;						// Quit If Window Was Not Created
 				}
 			}
+			#pragma region Convert Camera
 			if (keys['2'] && !OneClicked)
 			{
 				OneClicked = TRUE;
@@ -1141,6 +1087,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				myCamera->Position.setY(myCamera->Position.getY()+100);
 				myCamera->View.setY(-2);
 			}
+			#pragma endregion
+			#pragma region Fog or Light or nothing
 			if (keys['G'])
 			{
 				glEnable(GL_FOG);		// Enables GL_FOG
@@ -1161,6 +1109,99 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				glDisable(GL_LIGHTING);
 				//glDisable(GL_LIGHT0);
 			}
+			#pragma endregion
+			#pragma region Tank Move
+			if(keys[VK_LEFT])
+			{
+				if (IsNotCollide(tank->pos.x, tank->pos.z))
+				{
+					tank->rot.y += 0.9;
+					if (OneClicked)
+						myCamera->RotateY(0.9);
+				}
+			}
+			else if(keys[VK_RIGHT])
+			{
+				if (IsNotCollide(tank->pos.x, tank->pos.z))
+				{
+					tank->rot.y -= 0.9;
+					if (OneClicked)
+						myCamera->RotateY(-0.9);
+				}
+			}
+			if(keys[VK_UP])
+			{
+				float r = toRadian(tank->rot.y);
+				speed += acceleration;
+				float dx = tank->pos.x - speed*sin(r);
+				float dz = tank->pos.z - speed*cos(r);
+				if (IsNotCollide(dx, dz))
+				{
+					tank->pos.x = dx;
+					tank->pos.z = dz;
+				}
+				else
+				{
+					speed = 0;
+				}
+			}
+			else
+			{
+				if (speed > 0)
+				{
+					float r = toRadian(tank->rot.y);
+					speed -= acceleration;
+					float dx = tank->pos.x - speed*sin(r);
+					float dz = tank->pos.z - speed*cos(r);
+					if (IsNotCollide(dx, dz))
+					{
+						tank->pos.x = dx;
+						tank->pos.z = dz;
+					}
+				}
+			}
+			if(keys[VK_DOWN])
+			{
+				float r = toRadian(tank->rot.y);
+				if (speed > 0)
+					speed -= acceleration;
+				else
+				{
+					float dx = tank->pos.x + 2*sin(r);
+					float dz = tank->pos.z + 2*cos(r);
+					if (IsNotCollide(dx, dz))
+					{
+						tank->pos.x = dx;
+						tank->pos.z = dz;
+					}
+					else
+					{
+						speed = 0;
+					}
+				}
+			}
+			#pragma endregion
+			#pragma region Camera Move
+			if (!OneClicked)
+			{
+				if(keys['A'])
+					myCamera->RotateY(0.5);
+				if(keys['D'])
+					myCamera->RotateY(-0.5);
+				if(keys['W'])
+					myCamera->MoveForward(2.5);
+				if(keys['S'])
+					myCamera->MoveForward(-2.5);
+				if(keys['X'])
+					myCamera->RotateX(0.5);	
+				if(keys['Z'])
+					myCamera->RotateX(-0.5);
+				if(keys['F'])
+					myCamera->Move(Vector3D(0,-4,0));
+				if(keys['R'])
+					myCamera->Move(Vector3D(0,4,0));
+			}
+			#pragma endregion
 		}
 	}
 
