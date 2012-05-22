@@ -51,6 +51,7 @@ Texture road1;
 Texture ground;
 Texture buildingTexture;
 Texture buildingTexture1;
+Texture buildingTexture2;
 Texture glassTexture;
 Texture glassTexture1;
 Texture wall;
@@ -230,6 +231,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	ground.loadTexture("data/ground.bmp");
 	buildingTexture.loadTexture("data/Building2.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
+	buildingTexture2.loadTexture("data/Building.bmp");
 	glassTexture.loadTexture("data/glass.bmp");
 	glassTexture1.loadTexture("data/glass block.bmp");
 	wall.loadTexture("data/WallBlack.bmp");
@@ -430,7 +432,7 @@ void DrawCube(float width, float height, float length,
 	glPopMatrix();
 }
 #pragma endregion
-#pragma region To Radian
+#pragma region to radian
 float toRadian(float d)
 {
 	return (3.14*tank->rot.y)/180;
@@ -490,10 +492,8 @@ void DrawRoad()
 	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-
 	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
 	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
-
 	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
 	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
@@ -506,7 +506,6 @@ void DrawRoad()
 	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
-	
 	DrawCube(50, 1, 180, 50, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
@@ -710,13 +709,18 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	skyBox->draw();
 
 	//Draw buildings
-	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, false, buildingTexture.getTexture());
+	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, false, buildingTexture.getTexture(), -1, 
+		buildingTexture.getTexture(), buildingTexture.getTexture());
+	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, true, buildingTexture1.getTexture());
+	DrawCube(100, 100, 100, 480, 85, -700, 0, 0, 0, 0, true, buildingTexture2.getTexture(), -1, 
+		buildingTexture2.getTexture(), buildingTexture2.getTexture());
+
+	//Draw building's glasses
 	DrawGlass(80, 30, 0, 175, -670, 0, 0, 0, 0, glassTexture.getTexture());
 	DrawGlass(80, 30, 0, 175, -830, 0, 0, 0, 0, glassTexture.getTexture());
 	DrawGlass(80, 30, 80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
 	DrawGlass(80, 30, -80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
 	DrawGlass(80, 80, 0, 205, -750, 90, 1, 0, 0, glassTexture.getTexture());
-	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, true, buildingTexture1.getTexture());
 	DrawGlass(80, 100, -200, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
 	DrawGlass(80, 100, -400, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
 	DrawGlass(80, 100, -340, 85, -672, 0, 0, 0, 0, glassTexture1.getTexture());
