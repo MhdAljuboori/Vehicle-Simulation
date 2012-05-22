@@ -52,6 +52,7 @@ Texture buildingTexture;
 Texture buildingTexture1;
 Texture glassTexture;
 Texture glassTexture1;
+Texture wall;
 #pragma endregion
 
 #pragma region Decors variable
@@ -240,9 +241,10 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	buildingTexture1.loadTexture("data/Building1.bmp");
 	glassTexture.loadTexture("data/glass.bmp");
 	glassTexture1.loadTexture("data/glass block.bmp");
+	wall.loadTexture("data/WallBlack.bmp");
 	#pragma endregion
 	
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);					// Set The Blending Function For Translucency
 
 	return true;										// Initialization Went OK
 }
@@ -283,6 +285,24 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
 #pragma endregion
+void DrawFence()
+{
+	glDisable(GL_LIGHTING);
+	glEnable(GL_BLEND); // Enable Blending
+	
+	glBlendFunc(GL_DST_COLOR,GL_ZERO);
+
+	DrawGlass(100, 100, 530, 0, 300, 0, 0, 0, 0, wall.getTexture());
+	DrawGlass(100, 100, 437, 0, 200, 100, 0, 1, 0, wall.getTexture());
+	DrawGlass(100, 100, 475, 0, 6, -95, 0, 1, 0, wall.getTexture());
+	DrawGlass(100, 100, 605, 0, -102, 20, 0, 1, 0, wall.getTexture());
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	glDisable(GL_BLEND); // Disable Blending
+	if (light->isLightOn() || tank_Leftlight->isLightOn() || tank_Rightlight->isLightOn())
+		glEnable(GL_LIGHTING);
+}
 #pragma region draw cube
 void DrawCube(float width, float height, float length, 
 				float posX=0, float posY=0, float posZ=0, 
@@ -629,7 +649,7 @@ bool IsNotCollide(float posX, float posZ)
 	return false;
 }
 #pragma endregion
-
+float num1=0, num2=0, num3=0, rot=0;
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
@@ -637,18 +657,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	myCamera->Render();
 
 	#pragma region draw natural
-	//Draw buildings
-	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, true, buildingTexture.getTexture());
-	DrawGlass(80, 30, 0, 175, -670, 0, 0, 0, 0, glassTexture.getTexture());
-	DrawGlass(80, 30, 0, 175, -830, 0, 0, 0, 0, glassTexture.getTexture());
-	DrawGlass(80, 30, 80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
-	DrawGlass(80, 30, -80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
-	DrawGlass(80, 80, 0, 205, -750, 90, 1, 0, 0, glassTexture.getTexture());
-	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, true, buildingTexture1.getTexture());
-	DrawGlass(80, 100, -200, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
-	DrawGlass(80, 100, -400, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
-	DrawGlass(80, 100, -340, 85, -672, 0, 0, 0, 0, glassTexture1.getTexture());
-
 	//DrawTowers
 	DrawTower(300, 180, 40);
 	DrawTower(-280, 220, 200);
@@ -689,8 +697,25 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	Decor6->Materials[1].tex = Decor1texture;
 	Decor6->Materials[2].tex = Decor1texture;
 	#pragma endregion
+
 	terrain->draw();
 	skyBox->draw();
+
+	//Draw buildings
+	DrawCube(80, 80, 80, 0, 65, -750, 0, 0, 0, 0, false, buildingTexture.getTexture());
+	DrawGlass(80, 30, 0, 175, -670, 0, 0, 0, 0, glassTexture.getTexture());
+	DrawGlass(80, 30, 0, 175, -830, 0, 0, 0, 0, glassTexture.getTexture());
+	DrawGlass(80, 30, 80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
+	DrawGlass(80, 30, -80, 175, -750, 103, 0, 1, 0, glassTexture.getTexture());
+	DrawGlass(80, 80, 0, 205, -750, 90, 1, 0, 0, glassTexture.getTexture());
+	DrawCube(80, 100, 80, -300, 85, -750, 0, 0, 0, 0, true, buildingTexture1.getTexture());
+	DrawGlass(80, 100, -200, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
+	DrawGlass(80, 100, -400, 85, -750, 90, 0, 1, 0, glassTexture1.getTexture());
+	DrawGlass(80, 100, -340, 85, -672, 0, 0, 0, 0, glassTexture1.getTexture());
+
+	//Draw Fence
+	DrawFence();
+	
 	#pragma endregion
 	#pragma region Tank drawing
 	Model_3DS::Color ambient;
@@ -733,9 +758,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		Vector3D camPos  = myCamera->getPosition();
 		Vector3D camRot  = myCamera->getRotation();
 		Vector3D camView = myCamera->getView();
-		DrawGlass(10, 5, camPos.getX()+ (camView.getX()*5), camPos.getY() + (camView.getY()*5), 
+		/*DrawGlass(10, 5, camPos.getX()+ (camView.getX()*5), camPos.getY() + (camView.getY()*5), 
 				camPos.getZ() + (camView.getZ()*5), 30, 
-				camRot.getX(), camRot.getY(), camRot.getZ());
+				camRot.getX(), camRot.getY(), camRot.getZ());*/
 	}
 	#pragma endregion
 
