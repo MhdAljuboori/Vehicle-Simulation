@@ -1150,6 +1150,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					mPressed = FALSE;
 				}
 			}
+			#pragma endregion
 			#pragma region Tank Move
 			if(keys[VK_LEFT])
 			{
