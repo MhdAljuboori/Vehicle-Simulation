@@ -88,6 +88,7 @@ GLfloat LightAmbient[]  =	{ 0.5f, 0.5f, 0.0f, 1.0f };
 GLfloat LightDiffuse[]  =	{ 0.0f, 0.0f, 1.0f, 1.0f };
 GLfloat LightSpecular[] =   { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[] =	{ 0.0f, 200.0f, 0.0f, 1.0f };
+bool mPressed=FALSE;
 #pragma endregion
 #pragma region Fog variable
 bool gp; // G Pressed?
@@ -1097,17 +1098,6 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					SwapBuffers(hDC);				// Swap Buffers (Double Buffering)
 				}
 			}
-			if (keys[VK_F1])						// Is F1 Being Pressed?
-			{
-				keys[VK_F1]=FALSE;					// If So Make Key FALSE
-				KillGLWindow();						// Kill Our Current Window
-				fullscreen=!fullscreen;				// Toggle Fullscreen / Windowed Mode
-				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("Mhd Aljobory && Qusay Kamel && Mhd Jarrah (Car Simulation)",700,500,16,fullscreen))
-				{
-					return 0;						// Quit If Window Was Not Created
-				}
-			}
 			#pragma region Convert Camera
 			if (keys['2'] && !OneClicked)
 			{
@@ -1143,18 +1133,23 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 			}
 			else if (keys['M'])
 			{
-				glEnable(GL_LIGHTING);
-				tank_Leftlight->enableLight();
-				tank_Rightlight->enableLight();
+				keys['M'] = FALSE;
+				if (!mPressed)
+				{
+					glEnable(GL_LIGHTING);
+					tank_Leftlight->enableLight();
+					tank_Rightlight->enableLight();
+					mPressed = TRUE;
+				}
+				else
+				{
+					if (!light->isLightOn())
+						glDisable(GL_LIGHTING);
+					tank_Leftlight->disableLight();
+					tank_Rightlight->disableLight();
+					mPressed = FALSE;
+				}
 			}
-			else if (keys['N'])
-			{
-				if (!light->isLightOn())
-					glDisable(GL_LIGHTING);
-				tank_Leftlight->disableLight();
-				tank_Rightlight->disableLight();
-			}
-			#pragma endregion
 			#pragma region Tank Move
 			if(keys[VK_LEFT])
 			{
