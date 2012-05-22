@@ -47,6 +47,7 @@ Texture blackTexture;
 Texture woodTexture;
 Texture woodTexture1;
 Texture road;
+Texture road1;
 Texture ground;
 Texture buildingTexture;
 Texture buildingTexture1;
@@ -54,7 +55,6 @@ Texture glassTexture;
 Texture glassTexture1;
 Texture wall;
 #pragma endregion
-
 #pragma region Decors variable
 Model_3DS* Decor1;
 Model_3DS* Decor2;
@@ -64,7 +64,6 @@ Model_3DS* Decor5;
 Model_3DS* Decor6;
 GLTexture Decor1texture;
 #pragma endregion
-
 #pragma region tank variable
 Model_3DS* tank;
 GLTexture body;
@@ -83,14 +82,12 @@ GLfloat tank_LightSpecular[]  = { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat tank_LightPosition[]  =	{ 0.0f, 0.0f, 0.0f, 1.0f };
 GLfloat tank_LightDirection[] = { 0.0f, 0.0f, -1.0f, 0.0f}; 
 #pragma endregion
-
 #pragma region Light variable
 GLfloat LightAmbient[]  =	{ 0.5f, 0.5f, 0.0f, 1.0f };
 GLfloat LightDiffuse[]  =	{ 0.0f, 0.0f, 1.0f, 1.0f };
 GLfloat LightSpecular[] =   { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[] =	{ 0.0f, 200.0f, 0.0f, 1.0f };
 #pragma endregion
-
 #pragma region Fog variable
 bool gp; // G Pressed?
 GLuint filter; // Which Filter To Use
@@ -142,19 +139,16 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
 	glEnable(GL_FOG);
 	#pragma endregion
-
 	#pragma region Global Light
 	light = new Light(LightAmbient, LightSpecular, LightDiffuse, LightPosition, GL_LIGHT0);
 	light->setUpLight();
 	#pragma endregion
-
 	#pragma region Tank Lights
 	tank_Leftlight = new Light(tank_LightAmbient, tank_LightSpecular, tank_LightDiffuse,
 		tank_LightPosition, tank_LightDirection, 10, GL_LIGHT1);
 	tank_Rightlight = new Light(tank_LightAmbient,tank_LightSpecular,tank_LightDiffuse,
 		tank_LightPosition,tank_LightDirection,10,GL_LIGHT2);
 	#pragma endregion
-
 	#pragma region Terrain Load
 	// Terrain
 	terrain = new Terrain(keys, texture_num);
@@ -165,7 +159,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	// Draw Terrain
 	terrain->Draw(0,-71,0);
 	#pragma endregion
-
 	#pragma region Load Tank Model & Texture
 	// Tank
 	tank = new Model_3DS();
@@ -176,7 +169,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	MGunM.LoadBMP("Data/tanktexture/GunM.bmp");
 	MGun.LoadBMP("Data/tanktexture/MGun.bmp");
 	#pragma endregion
-
 	#pragma region Decors
 	Decor1 = new Model_3DS();
 	Decor2 = new Model_3DS();
@@ -224,18 +216,17 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	Decor4->rot.y = 180;
 	Decor1texture.LoadBMP("Data/decorstextures/tank.bmp");
 	#pragma endregion
-
 	#pragma region Load Sky Box
 	// Skybox with load texture
 	skyBox = new SkyBox("data/skybox/top.bmp", "data/skybox/down.bmp", "data/skybox/left.bmp", 
 					"data/skybox/right.bmp", "data/skybox/front.bmp", "data/skybox/back.bmp");
 	#pragma endregion
-
 	#pragma region Load Textures
 	blackTexture.loadTexture("data/black.bmp");
 	woodTexture.loadTexture("data/wood.bmp");
 	woodTexture1.loadTexture("data/wood1.bmp");
 	road.loadTexture("data/road.bmp");
+	road1.loadTexture("data/road1.bmp");
 	ground.loadTexture("data/ground.bmp");
 	buildingTexture.loadTexture("data/Building2.bmp");
 	buildingTexture1.loadTexture("data/Building1.bmp");
@@ -285,6 +276,7 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5);
 }
 #pragma endregion
+#pragma region draw fence
 void DrawFence()
 {
 	glDisable(GL_LIGHTING);
@@ -303,6 +295,7 @@ void DrawFence()
 	if (light->isLightOn() || tank_Leftlight->isLightOn() || tank_Rightlight->isLightOn())
 		glEnable(GL_LIGHTING);
 }
+#pragma endregion
 #pragma region draw cube
 void DrawCube(float width, float height, float length, 
 				float posX=0, float posY=0, float posZ=0, 
@@ -497,22 +490,24 @@ void DrawRoad()
 	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+
+	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
+	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
+
+	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
 	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 80, 265, -15.0, -178, -70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 30, 350, -14.9, -220, -50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 40, 382, -14.8, -262, -30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
 	DrawCube(50, 1, 30, 400, -14.6, -350, 10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
 	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 200, -14.1, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 190, 80, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, true, -1, -1, -1, -1, road1.getTexture());
+	
+	DrawCube(50, 1, 180, 50, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
 	DrawCube(50, 1, 50, -495, -14.9, -480, 110, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
@@ -662,7 +657,7 @@ bool IsNotCollide(float posX, float posZ)
 	return false;
 }
 #pragma endregion
-float num1=0, num2=0, num3=0, rot=0;
+
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
