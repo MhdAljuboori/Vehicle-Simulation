@@ -478,55 +478,68 @@ void DrawTower(float posX, float posY, float posZ)
 #pragma region draw road
 void DrawRoad()
 {
-	DrawCube(50, 1, 60, 208, -14.7, 647, -70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 70, 285, -14.9, 590, -40, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, 340, -15, 505, -20, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 363, -14.9, 432, -15, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 373, -14.8, 352, -5, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 20, 375, -14.7, 290, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 20, 368, -14.6, 273, 20, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 344, -14.8, 250, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 272, -14.7, 230, 80, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, 265, -15.0, -178, -70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 350, -14.9, -220, -50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 40, 382, -14.8, -262, -30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 400, -14.6, -350, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 200, -14.1, -510, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 190, 80, -15, -510, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, -495, -14.9, -480, 110, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -570, -14.9, -452, 110, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -608, -14.8, -430, 130, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -635, -14.7, -400, 150, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -668, -14.6, -345, 150, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -726, -15, -242, 150, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -750, -14.9, -157, 0, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -742, -14.8, -62, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -742, -14.7, -62, 10, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 60, -710, -14.6, 30, 30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 90, -645, -15, 140, 30, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, -576, -14.9, 235, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 50, -500, -15, 300, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, -405, -15, 378, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 100, -275, -15, 486, 50, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, -185, -14.9, 550, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, -95, -15, 582, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
-	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, false, -1, -1, -1, -1, road.getTexture());
+	bool on = false;
+	if(tank_Leftlight->isLightOn())
+	{
+		on = true;
+		tank_Leftlight->disableLight();
+		tank_Rightlight->disableLight();
+	}
+	DrawCube(50, 1, 60, 208, -14.7, 647, -70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 70, 285, -14.9, 590, -40, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 340, -15, 505, -20, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 363, -14.9, 432, -15, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 373, -14.8, 352, -5, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 20, 375, -14.7, 290, 10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 20, 368, -14.6, 273, 20, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 344, -14.8, 250, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 272, -14.7, 230, 80, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 182, -14.5, 205, 60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 100, -14.4, 158, 60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 53, -14.3, 120, 40, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 20, -14.2, 65, 20, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 6, -14.1, 2, 0, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 20, -14.0, -48, -30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, 70, -13.9, -90, -60, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 150, -15.0, -135, -70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, 265, -15.0, -178, -70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 350, -14.9, -220, -50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 40, 382, -14.8, -262, -30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.7, -310, -10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 400, -14.6, -350, 10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 380, -14.5, -390, 30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 350, -14.4, -420, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, 290, -14.4, -470, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 240, -14.3, -500, 70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 200, -14.1, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 190, 80, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 150, -260, -15, -510, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -422, -14.9, -505, 110, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -495, -14.9, -480, 110, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -570, -14.9, -452, 110, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -608, -14.8, -430, 130, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -635, -14.7, -400, 150, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -668, -14.6, -345, 150, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -726, -15, -242, 150, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -750, -14.9, -157, 0, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -742, -14.8, -62, 10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -742, -14.7, -62, 10, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 60, -710, -14.6, 30, 30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 90, -645, -15, 140, 30, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -576, -14.9, 235, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 50, -500, -15, 300, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, -405, -15, 378, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 100, -275, -15, 486, 50, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, -185, -14.9, 550, 70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, -95, -15, 582, 70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 80, 50, -15, 635, 70, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	DrawCube(50, 1, 30, 140, -14.8, 660, 90, 0, 1, 0, true, -1, -1, -1, -1, road.getTexture());
+	if(on)
+	{
+		on = false;
+		tank_Leftlight->enableLight();
+		tank_Rightlight->enableLight();
+	}
 }
 #pragma endregion
 #pragma endregion
