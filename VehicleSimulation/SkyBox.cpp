@@ -10,7 +10,8 @@ SkyBox::SkyBox()
 	back = NULL;
 }
 
-SkyBox::SkyBox(char* toppath,char* bottompath,char* leftpath,char* rightpath,char* frontpath,char* backpath)
+SkyBox::SkyBox(char* toppath,char* bottompath, char* leftpath, char* rightpath, 
+	char* frontpath, char* backpath)
 {
 	top.loadTexture(toppath);
 	bottom.loadTexture(bottompath);
@@ -24,53 +25,55 @@ void SkyBox::draw()
 {
 	glPushMatrix();
 
-	glBindTexture(GL_TEXTURE_2D,front.getTexture());
-	   glBegin(GL_QUADS);
+		glBindTexture(GL_TEXTURE_2D,front.getTexture());
 		// Front Face
+	   glBegin(GL_QUADS);
 			glNormal3f( 0.0f, 0.0f, 0.5f);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f,  1000.0f);
 			glTexCoord2f(1.0f, 0.0f); glVertex3f( 1000.0f, -1000.0f,  1000.0f);
 			glTexCoord2f(1.0f, 1.0f); glVertex3f( 1000.0f,  1000.0f,  1000.0f);
 			glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f,  1000.0f,  1000.0f);
-		// Back Face
+		
 		glEnd();
-	 glBindTexture(GL_TEXTURE_2D,back.getTexture());
+		// Back Face
+		glBindTexture(GL_TEXTURE_2D,back.getTexture());
 	    glBegin(GL_QUADS);
 			glNormal3f( 0.0f, 0.0f,-0.5f);
 			glTexCoord2f(1.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);
 			glTexCoord2f(1.0f, 1.0f); glVertex3f(-1000.0f,  1000.0f, -1000.0f);
 			glTexCoord2f(0.0f, 1.0f); glVertex3f( 1000.0f,  1000.0f, -1000.0f);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f( 1000.0f, -1000.0f, -1000.0f);
-		// Top Face
 		glEnd();
-	 glBindTexture(GL_TEXTURE_2D,top.getTexture());
+		glBindTexture(GL_TEXTURE_2D,top.getTexture());
+		// Top Face
 		glBegin(GL_QUADS);
 		    glNormal3f( 0.0f, 0.5f, 0.0f);
 			glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f,  1000.0f, -1000.0f);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f,  1000.0f,  1000.0f);
 			glTexCoord2f(1.0f, 0.0f); glVertex3f( 1000.0f,  1000.0f,  1000.0f);
 			glTexCoord2f(1.0f, 1.0f); glVertex3f( 1000.0f,  1000.0f, -1000.0f);
-		// Bottom Face
 		glEnd();
-	 glBindTexture(GL_TEXTURE_2D,bottom.getTexture());
+		glBindTexture(GL_TEXTURE_2D,bottom.getTexture());
+		// Bottom Face
 		glBegin(GL_QUADS);
 			glNormal3f( 0.0f,-0.5f, 0.0f);
 			glTexCoord2f(1.0f, 1.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);
 			glTexCoord2f(0.0f, 1.0f); glVertex3f( 1000.0f, -1000.0f, -1000.0f);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f( 1000.0f, -1000.0f,  1000.0f);
 			glTexCoord2f(1.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f,  1000.0f);
-		// Right Face
+		
 		glEnd();
-	 glBindTexture(GL_TEXTURE_2D,right.getTexture());
+		glBindTexture(GL_TEXTURE_2D,right.getTexture());
+		// Right Face
 		glBegin(GL_QUADS);
 			glNormal3f( 0.5f, 0.0f, 0.0f);
 			glTexCoord2f(1.0f, 0.0f); glVertex3f( 1000.0f, -1000.0f, -1000.0f);
 			glTexCoord2f(1.0f, 1.0f); glVertex3f( 1000.0f,  1000.0f, -1000.0f);
 			glTexCoord2f(0.0f, 1.0f); glVertex3f( 1000.0f,  1000.0f,  1000.0f);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f( 1000.0f, -1000.0f,  1000.0f);
-		// Left Face
 		glEnd();
-	 glBindTexture(GL_TEXTURE_2D,left.getTexture());
+		glBindTexture(GL_TEXTURE_2D,left.getTexture());
+		// Left Face
 		glBegin(GL_QUADS);
 			glNormal3f(-0.5f, 0.0f, 0.0f);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);

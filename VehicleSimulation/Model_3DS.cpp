@@ -85,43 +85,43 @@
 
 // The chunk's id numbers
 #define MAIN3DS				0x4D4D
- #define MAIN_VERS			0x0002
- #define EDIT3DS			0x3D3D
-  #define MESH_VERS			0x3D3E
-  #define OBJECT			0x4000
-   #define TRIG_MESH		0x4100
-    #define VERT_LIST		0x4110
-    #define FACE_DESC		0x4120
-     #define FACE_MAT		0x4130
-    #define TEX_VERTS		0x4140
-     #define SMOOTH_GROUP	0x4150
-    #define LOCAL_COORDS	0x4160
-  #define MATERIAL			0xAFFF
-   #define MAT_NAME			0xA000
-   #define MAT_AMBIENT		0xA010
-   #define MAT_DIFFUSE		0xA020
-   #define MAT_SPECULAR		0xA030
-   #define SHINY_PERC		0xA040
-   #define SHINY_STR_PERC	0xA041
-   #define TRANS_PERC		0xA050
-   #define TRANS_FOFF_PERC	0xA052
-   #define REF_BLUR_PERC	0xA053
-   #define RENDER_TYPE		0xA100
-   #define SELF_ILLUM		0xA084
-   #define MAT_SELF_ILPCT	0xA08A
-   #define WIRE_THICKNESS	0xA087
-   #define MAT_TEXMAP		0xA200
-    #define MAT_MAPNAME		0xA300
-  #define ONE_UNIT			0x0100
- #define KEYF3DS			0xB000
-  #define FRAMES			0xB008
-  #define MESH_INFO			0xB002
-   #define HIER_POS			0xB030
-   #define HIER_FATHER		0xB010
-   #define PIVOT_PT			0xB013
-   #define TRACK00			0xB020
-   #define TRACK01			0xB021
-   #define TRACK02			0xB022
+#define MAIN_VERS			0x0002
+#define EDIT3DS				0x3D3D
+#define MESH_VERS			0x3D3E
+#define OBJECT				0x4000
+#define TRIG_MESH			0x4100
+#define VERT_LIST			0x4110
+#define FACE_DESC			0x4120
+#define FACE_MAT			0x4130
+#define TEX_VERTS			0x4140
+#define SMOOTH_GROUP		0x4150
+#define LOCAL_COORDS		0x4160
+#define MATERIAL			0xAFFF
+#define MAT_NAME			0xA000
+#define MAT_AMBIENT			0xA010
+#define MAT_DIFFUSE			0xA020
+#define MAT_SPECULAR		0xA030
+#define SHINY_PERC			0xA040
+#define SHINY_STR_PERC		0xA041
+#define TRANS_PERC			0xA050
+#define TRANS_FOFF_PERC		0xA052
+#define REF_BLUR_PERC		0xA053
+#define RENDER_TYPE			0xA100
+#define SELF_ILLUM			0xA084
+#define MAT_SELF_ILPCT		0xA08A
+#define WIRE_THICKNESS		0xA087
+#define MAT_TEXMAP			0xA200
+#define MAT_MAPNAME			0xA300
+#define ONE_UNIT			0x0100
+#define KEYF3DS				0xB000
+#define FRAMES				0xB008
+#define MESH_INFO			0xB002
+#define HIER_POS			0xB030
+#define HIER_FATHER			0xB010
+#define PIVOT_PT			0xB013
+#define TRACK00				0xB020
+#define TRACK01				0xB021
+#define TRACK02				0xB022
 #define	COLOR_RGB			0x0010
 #define COLOR_TRU			0x0011
 #define COLOR_TRUG			0x0012
@@ -239,39 +239,6 @@ void Model_3DS::Load(char *name)
 		totalFaces += Objects[i].numFaces/3;
 		totalVerts += Objects[i].numVerts;
 	}
-
-	// If the object doesn't have any texcoords generate some
-       /*	for (int k = 0; k < numObjects; k++)
-	{
-		if (Objects[k].numTexCoords == 0)
-		{
-			// Set the number of texture coords
-			Objects[k].numTexCoords = Objects[k].numVerts;
-
-			// Allocate an array to hold the texture coordinates
-			Objects[k].TexCoords = new GLfloat[Objects[k].numTexCoords * 2];
-
-			// Make some texture coords
-			for (int m = 0; m < Objects[k].numTexCoords; m++)
-			{
-				Objects[k].TexCoords[2*m] = Objects[k].Vertexes[3*m];
-				Objects[k].TexCoords[2*m+1] = Objects[k].Vertexes[3*m+1];
-			}
-		}
-	}   */
-
-	// Let's build simple colored textures for the materials w/o a texture
-       /*	for (int j = 0; j < numMaterials; j++)
-	{
-		if (Materials[j].textured == false)
-		{
-			unsigned char r = Materials[j].color.r;
-			unsigned char g = Materials[j].color.g;
-			unsigned char b = Materials[j].color.b;
-			Materials[j].tex.BuildColorTexture(r, g, b);
-			Materials[j].textured = true;
-		}
-	} */
 }
 
 void Model_3DS::Draw()

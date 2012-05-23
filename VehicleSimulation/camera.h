@@ -37,7 +37,6 @@ public:
 	void RotateY ( GLfloat Angle );
 	void RotateZ ( GLfloat Angle );
 	void RotateXYZ ( Vector3D Angles );
-	void SetRotateX(GLfloat Angle);
 	void MoveForward ( GLfloat Distance );
 	Vector3D getPosition();
 	Vector3D getRotation();

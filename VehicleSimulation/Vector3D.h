@@ -8,14 +8,14 @@ class Vector3D{
 public:
 	/////////////// constructors ///////////////////
 	Vector3D(): x(0),y(0),z(0) { }
-	Vector3D(float newx,float newy,float newz): x(newx),y(newy),z(newz) { }
+	Vector3D(float newx,  float newy, float newz): x(newx),y(newy),z(newz) { }
 	Vector3D(Vector3D& v): x(v.x),y(v.y),z(v.z) { }
 
 	///////////////  setter and getter ////////////
 	void setX(float newx) { x=newx; }
 	void setY(float newy) { y=newy; }
 	void setZ(float newz) { z=newz; }
-	void setVector3D(float newx , float newy , float newz) { x=newx; y=newy; z=newz; }
+	void setVector3D(float newx, float newy, float newz) { x=newx; y=newy; z=newz; }
 
 	float getX() { return x; }
 	float getY() { return y; }

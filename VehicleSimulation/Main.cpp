@@ -1,4 +1,3 @@
-
 #include <windows.h>		// Header File For Windows
 #include <gl/GL.h>				// Header File For The OpenGL32 Library
 #include <gl/glu.h>			// Header File For The GLu32 Library
@@ -30,17 +29,12 @@ bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen=TRUE; 	// Fullscreen Flag Set To Fullscreen Mode By Default
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
-//******************************************
-// ============= Members Definition =========
 
-//==========================================
-int texture_num;
 bool OneClicked = FALSE;
-
 Camera *myCamera;
 Terrain* terrain;
 SkyBox* skyBox;
-Light* light;
+
 
 #pragma region texture variable
 Texture blackTexture;
@@ -84,6 +78,7 @@ GLfloat tank_LightPosition[]  =	{ 0.0f, 0.0f, 0.0f, 1.0f };
 GLfloat tank_LightDirection[] = { 0.0f, 0.0f, -1.0f, 0.0f}; 
 #pragma endregion
 #pragma region Light variable
+Light* light;
 GLfloat LightAmbient[]  =	{ 0.5f, 0.5f, 0.0f, 1.0f };
 GLfloat LightDiffuse[]  =	{ 0.0f, 0.0f, 1.0f, 1.0f };
 GLfloat LightSpecular[] =   { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -91,11 +86,9 @@ GLfloat LightPosition[] =	{ 0.0f, 200.0f, 0.0f, 1.0f };
 bool mPressed=FALSE;
 #pragma endregion
 #pragma region Fog variable
-bool gp; // G Pressed?
-GLuint filter; // Which Filter To Use
-GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR }; // Storage For Three Types Of Fog
-GLuint fogfilter= 2; // Which Fog To Use
-GLfloat fogColor[4]= {0.5f, 0.5f, 0.5f, 1.0f}; // Fog Color
+GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR };	// Storage For Three Types Of Fog
+GLuint fogfilter= 2;								// Which Fog To Use
+GLfloat fogColor[4]= {0.5f, 0.5f, 0.5f, 1.0f};		// Fog Color
 #pragma endregion
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
@@ -121,7 +114,7 @@ GLUquadric *quadric ;
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Full brightness with apha 50%
+	glClearColor(1.0f, 1.0f, 1.0f, 0.5f);				// Full brightness with apha 50%
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
@@ -132,14 +125,13 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	myCamera = new Camera(Vector3D(100, 300, 300), Vector3D(0, 0, -1));
 
 	#pragma region Fog
-	glClearColor(0.5f,0.5f,0.5f,1.0f); // We'll Clear To The Color Of The Fog
 	glFogi(GL_FOG_MODE, fogMode[fogfilter]); // Fog Mode
-	glFogfv(GL_FOG_COLOR, fogColor); // Set Fog Color
-	glFogf(GL_FOG_DENSITY, 0.35f); // How Dense Will The Fog Be
-	glHint(GL_FOG_HINT, GL_DONT_CARE); // Fog Hint Value
-	glFogf(GL_FOG_START, 1.0f); // Fog Start Depth
-	glFogf(GL_FOG_END, 1000.0f); // Fog End Depth
-	glEnable(GL_FOG);
+	glFogfv(GL_FOG_COLOR, fogColor);		 // Set Fog Color
+	glFogf(GL_FOG_DENSITY, 0.35f);			 // How Dense Will The Fog Be
+	glHint(GL_FOG_HINT, GL_DONT_CARE);		 // Fog Hint Value
+	glFogf(GL_FOG_START, 1.0f);				 // Fog Start Depth
+	glFogf(GL_FOG_END, 1000.0f);			 // Fog End Depth
+	glEnable(GL_FOG);						 // Enable Fog
 	#pragma endregion
 	#pragma region Global Light
 	light = new Light(LightAmbient, LightSpecular, LightDiffuse, LightPosition, GL_LIGHT0);
@@ -153,13 +145,13 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	#pragma endregion
 	#pragma region Terrain Load
 	// Terrain
-	terrain = new Terrain(keys, texture_num);
+	terrain = new Terrain();
 	// Terrain Texture
 	terrain->LoadTexture("Data/terrain ground.bmp");
 	// Load Heightmap
 	terrain->LoadHeightMap("Data/terrain height.bmp");
 	// Draw Terrain
-	terrain->Draw(0,-71,0);
+	terrain->Draw(0, -71, 0);
 	#pragma endregion
 	#pragma region Load Tank Model & Texture
 	// Tank
@@ -249,6 +241,7 @@ void DrawGlass(float width = 10, float height=5, float posX=0, float posY=0, flo
 				float angle=45, float rotX=1, float rotY=0, float rotZ=0, int texture=-1)
 {
 	glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glTranslatef(posX, posY, posZ);
 		if (rotY > 0)
 			glRotatef(rotY-15, 0, 1, 0);
@@ -285,7 +278,7 @@ void DrawFence()
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND); // Enable Blending
 	
-	glBlendFunc(GL_DST_COLOR,GL_ZERO);
+	glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
 	DrawGlass(100, 100, 530, 0, 300, 0, 0, 0, 0, wall.getTexture());
 	DrawGlass(100, 100, 437, 0, 200, 100, 0, 1, 0, wall.getTexture());
@@ -442,7 +435,6 @@ float toRadian(float d)
 #pragma region draw tower
 void DrawTower(float posX, float posY, float posZ)
 {
-	//300, 180, 40
 	DrawCube(4, 50, 4, posX-20, posY-80, posZ, 5, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
 		woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture(), woodTexture1.getTexture());
 	DrawCube(4, 50, 4, posX-20, posY-80, posZ-40, -5, 1, 0, 0, true, woodTexture1.getTexture(), woodTexture1.getTexture(), 
@@ -767,13 +759,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	if (OneClicked)
 	{
 		myCamera->Position.setVector3D(tank->pos.x, tank->pos.y+20, tank->pos.z);
-		
-		Vector3D camPos  = myCamera->getPosition();
-		Vector3D camRot  = myCamera->getRotation();
-		Vector3D camView = myCamera->getView();
-		/*DrawGlass(10, 5, camPos.getX()+ (camView.getX()*5), camPos.getY() + (camView.getY()*5), 
-				camPos.getZ() + (camView.getZ()*5), 30, 
-				camRot.getX(), camRot.getY(), camRot.getZ());*/
 	}
 	#pragma endregion
 

@@ -57,9 +57,9 @@ Vector3D Vector3D::Substract(Vector3D& vector)
 
 Vector3D Vector3D::crossProduct(Vector3D& vect1, Vector3D& vect2)
 {
-	return Vector3D( (vect1.y*vect2.z)- (vect1.z*vect2.y) , 
-					(vect1.z*vect2.x) - (vect1.x*vect2.z) , 
-					(vect1.x*vect2.y) - (vect1.y*vect2.x) );
+	return Vector3D((vect1.y*vect2.z) - (vect1.z*vect2.y), 
+					(vect1.z*vect2.x) - (vect1.x*vect2.z), 
+					(vect1.x*vect2.y) - (vect1.y*vect2.x));
 }
 
 float Vector3D::dotProduct(Vector3D& vector)
@@ -69,12 +69,10 @@ float Vector3D::dotProduct(Vector3D& vector)
 
 
 /////////////  Overloaded  Operators   //////////////
-
 Vector3D Vector3D::operator=(Vector3D& vector)
 {
 	this->x =vector.x ;  this->y=vector.y ; this->z = vector.z;
 	return *this;
-	//return Vector3D(vector.x,vector.y,vector.z);
 }
 
 Vector3D Vector3D::operator+(Vector3D& vector)

@@ -9,7 +9,8 @@ class SkyBox
 
 public:
 	SkyBox();
-	SkyBox(char* toppath,char* bottompath,char* leftpath,char* rightpath,char* frontpath,char* backpath);
+	SkyBox(char* toppath, char* bottompath, char* leftpath, char* rightpath, 
+		char* frontpath, char* backpath);
 	void draw();
 	void setTop(char* path) { top.loadTexture(path); }
 	void setBottom(char* path) { bottom.loadTexture(path); }

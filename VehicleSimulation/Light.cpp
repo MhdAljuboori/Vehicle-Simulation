@@ -58,18 +58,13 @@ void Light::setUpLight()
 		glLightfv(lightName,GL_POSITION,position);
 		glLightfv(lightName,GL_SPOT_DIRECTION,spotDirection);
 		glLightf(lightName,GL_SPOT_CUTOFF,spotCutOff);
-		//glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
-		//glEnable(lightName);
 	}
-
 	else
 	{
 		glLightfv(lightName,GL_AMBIENT,ambient);
 		glLightfv(lightName,GL_SPECULAR,specular);
 		glLightfv(lightName,GL_DIFFUSE,diffuse);
 		glLightfv(lightName,GL_POSITION,position);
-		//glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
-		//glEnable(lightName);
 	}
 }
 

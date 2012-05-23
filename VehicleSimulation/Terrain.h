@@ -11,7 +11,7 @@
 class Terrain
 {
 public:
-	Terrain(bool keys, int &texture_num, int mapSize = 512, float stepSize = 1/512.0);
+	Terrain(int mapSize = 512, float stepSize = 1/512.0);
 	~Terrain(void);
 
 	//get methods
@@ -23,12 +23,6 @@ public:
 	void draw();
 
 	float scaleValue;		// Scale Value For The Terrain
-
-	void setWire();
-	void setPolygon();
-	void setWireNot();
-
-	bool IsPolygon();
 	
 	// Load Bitmaps And Convert To Textures
 	void LoadTexture(char *filename);
@@ -46,9 +40,6 @@ private:
 	float stepSize;			// Width And Height Of Each Quad 
 							// ( low value more smooth if 1 it's mean vertex every pixel)
 
-	bool keys[256]; // Array Used For The Keyboard Routine
-	bool WireRender; // Polygon Flag Set To TRUE By Default
-	GLubyte* HeightMap; // Holds The Height Map Data
-
-	static Vector3D CalcNormal(Vector3D v1, Vector3D v2, Vector3D v3);
+	bool keys[256];			// Array Used For The Keyboard Routine
+	GLubyte* HeightMap;		// Holds The Height Map Data
 };
