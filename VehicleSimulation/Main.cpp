@@ -1,6 +1,6 @@
-#include <windows.h>		// Header File For Windows
+#include <windows.h>			// Header File For Windows
 #include <gl/GL.h>				// Header File For The OpenGL32 Library
-#include <gl/glu.h>			// Header File For The GLu32 Library
+#include <gl/glu.h>				// Header File For The GLu32 Library
 #include <gl/glut.h>			// Header File For The GLut32 Library
 #include <fstream>
 #include <math.h>
@@ -8,7 +8,6 @@
 #include "Texture.h"
 #include "camera.h"
 #include "Model_3DS.h"
-#include "Environment.h"
 #include "Light.h"
 
 //include lib file
